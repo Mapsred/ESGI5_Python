@@ -5,10 +5,8 @@ services:
       image: postgres
       container_name: esgi-pystone-postgres
       restart: always
-#      ports:
-#        - "8158:8000"
-#      environment:
-#          POSTGRES_PASSWORD: password
+      ports:
+        - "8158:5432"
 
     web:
       build: .
@@ -21,9 +19,9 @@ services:
       depends_on:
         - postgres
 
-#    adminer:
-#      container_name: esgi-pystone-adminer
-#      image: adminer
-#      restart: always
-#      ports:
-#        - "8258:8000"
+    adminer:
+      container_name: esgi-pystone-adminer
+      image: adminer
+      restart: always
+      ports:
+        - "8258:8080"
