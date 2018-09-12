@@ -32,3 +32,9 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.error-feedback {
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block stylesheet %}
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'registration/signin.css' %}">
+{% endblock %}
+
+{% block body-class %}text-center{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h4 class="mb-3">Sign up</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}">Username</label>
+                        <input type="text" class="form-control" id="{{ form.username.id_for_label }}"
+                               name="{{ form.username.html_name }}" placeholder="Username" required>
+                        <div class="text-muted">
+                            150 characters or fewer. Letters, digits and @/./+/-/_ only.
+                        </div>
+                        <div class="error-feedback">
+                            {{ form.errors.username }}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.password.id_for_label }}">Password</label>
+                            <input type="password" class="form-control" id="{{ form.password.id_for_label }}"
+                                   name="{{ form.password.html_name }}" required>
+                            <div class="error-feedback">
+                                {{ form.errors.password }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.password2.id_for_label }}">Password confirmation</label>
+                            <input type="password" class="form-control" id="{{ form.password2.id_for_label }}"
+                                   name="{{ form.password2.html_name }}" required>
+                            <div class="error-feedback">
+                                {{ form.errors.password2 }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 text-muted">
+                            Your password can't be too similar to your other personal information. <br>
+                            Your password must contain at least 8 characters. <br>
+                            Your password can't be a commonly used password. <br>
+                            Your password can't be entirely numeric. <br>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Sign up</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
