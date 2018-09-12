@@ -1,5 +1,5 @@
 fix-perm:
-	sudo chown -R $USER:$USER ./polls
+	sudo chown -R $USER:$USER ./
 
 bash:
 	docker-compose exec web bash
