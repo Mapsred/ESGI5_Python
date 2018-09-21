@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 import os
 import sys
+import requests
+
+# noinspection PyUnresolvedReferences
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+# noinspection PyUnresolvedReferences
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'PyStone.settings')

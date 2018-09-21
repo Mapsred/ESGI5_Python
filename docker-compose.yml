@@ -9,7 +9,12 @@ services:
         - "8158:5432"
 
     web:
-      build: .
+      build:
+        context: .
+        args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
       container_name: esgi-pystone-web
       command: python3 manage.py runserver 0.0.0.0:8000
       volumes:
@@ -18,10 +23,13 @@ services:
         - "8058:8000"
       depends_on:
         - postgres
+      environment:
+        - http_proxy
+        - https_proxy
+        - no_proxy
 
     adminer:
       container_name: esgi-pystone-adminer
       image: adminer
-      restart: always
       ports:
         - "8258:8080"
