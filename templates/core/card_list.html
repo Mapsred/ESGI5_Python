@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>card List</h1>
+        {% if card_list %}
+            <ul>
+                {% for card in card_list %}
+                    <li>
+                        <a href="{{ card.get_absolute_url }}">{{ card }}</a> ({{ card }})
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>There are no cards in the library.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -4,6 +4,7 @@ from django.db import models
 # Create your models here.
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.urls import reverse
 
 from accounts.models import Profile
 
@@ -32,6 +33,9 @@ class Card(models.Model):
     img = models.CharField(max_length=256, default=None, blank=True, null=True)
     img_gold = models.CharField(max_length=256, default=None, blank=True, null=True)
     mechanics = models.CharField(max_length=256, default=None, blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('card_detail', args=[str(self.id)])
 
     def __str__(self):
         return "[%s] - %s" % (self.card_id, self.name)
