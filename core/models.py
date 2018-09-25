@@ -52,6 +52,9 @@ class Deck(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     cards = models.ManyToManyField(Card)
 
+    def get_absolute_url(self):
+        return reverse('deck_detail', args=[str(self.id)])
+
     def __str__(self):
         return "%s (%s)" % (self.name, self.cards.count())
 

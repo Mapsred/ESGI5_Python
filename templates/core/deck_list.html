@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Deck List{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Deck List</h1>
+        {% if deck_list %}
+            <ul>
+                {% for deck in deck_list %}
+                    <li>
+                        <a href="{{ deck.get_absolute_url }}">{{ deck }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You don't have any deck yet</p>
+        {% endif %}
+    </div>
+{% endblock %}

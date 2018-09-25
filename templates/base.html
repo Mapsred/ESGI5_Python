@@ -25,13 +25,7 @@
 
     <div class="navbar-collapse offcanvas-collapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
-            </li>
             {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'card_list' %}">Card List</a>
                 </li>

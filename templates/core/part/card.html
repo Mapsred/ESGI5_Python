@@ -1,0 +1,19 @@
+{% load core_tags %}
+<div class="card flex-md-row mb-4 shadow-sm h-md-250">
+    <div class="card-body d-flex flex-column align-items-start">
+        <h3 class="mb-0">
+            <span class="text-dark">{{ card.name }}</span>
+        </h3>
+        <div class="mb-1 text-muted">{{ card.card_set.name }}</div>
+        <p class="card-text mb-auto">
+            {{ card.text|nl2br|safe }}
+        </p>
+        <p class="card-text mb-auto">
+            <b>Health :</b> {{ card.health }}
+            <br>
+            <b>Attack :</b> {{ card.attack }}
+        </p>
+    </div>
+    <img class="card-img-right flex-auto d-none d-lg-block" alt="{{ card.name }}" src="{{ card.image }}"
+         style="width: 200px; height: 250px;">
+</div>
