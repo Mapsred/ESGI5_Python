@@ -5,11 +5,15 @@
 {% block content %}
     <div class="container">
         <h1>Deck List</h1>
+        <a href="{% url "deck_add" %}">Creér un deck</a>
         {% if deck_list %}
             <ul>
                 {% for deck in deck_list %}
                     <li>
-                        <a href="{{ deck.get_absolute_url }}">{{ deck }}</a>
+                        Deck {{ deck }} :
+                        <a href="{% url "deck_detail" deck.id %}">Voir</a>
+                        <a href="{% url "deck_edit" deck.id %}">Éditer</a>
+                        <a href="">Supprimer</a>
                     </li>
                 {% endfor %}
             </ul>

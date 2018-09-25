@@ -4,12 +4,18 @@
 
 {% block content %}
     <div class="container">
-                <a href="{% url "deck_list" %}" class="d-inline-block mb-2 text-primary bold">
-                <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                Back to the list
-            </a>
+        <a href="{% url "deck_list" %}" class="d-inline-block mb-2 text-primary bold">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            Back to the list
+        </a>
 
         <div class="row">
+            <div class="col-md-12">
+                <b>Deck {{ deck.name }}</b>
+                <a href="{% url "deck_edit" deck.id %}">Éditer le deck</a>
+                <a href="#">Supprimer le deck</a>
+            </div>
+
             {% for card in deck.cards.all %}
                 <div class="col-md-6">
                     {% include "core/part/card.html" with card=card %}
