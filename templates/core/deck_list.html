@@ -7,15 +7,25 @@
         <h1>Deck List</h1>
         <a href="{% url "deck_add" %}">Creér un deck</a>
         {% if deck_list %}
-            <ul>
+            <ul class="list-group">
                 {% for deck in deck_list %}
-                    <li>
+                    <li class="list-group-item">
                         Deck {{ deck }} :
-                        <a href="{% url "deck_detail" deck.id %}">Voir</a>
-                        <a href="{% url "deck_edit" deck.id %}">Éditer</a>
-                        <a href="">Supprimer</a>
+                        <a href="{% url "deck_detail" deck.id %}">
+                            <i class="fa fa-eye text-primary" aria-hidden="true" data-toggle="tooltip"
+                               data-placement="top" title="View"></i>
+                        </a>
+                        <a href="{% url "deck_edit" deck.id %}">
+                            <i class="fa fa-pencil text-warning" aria-hidden="true" data-toggle="tooltip"
+                               data-placement="top" title="Edit"></i>
+                        </a>
+                        <a href="#">
+                            <i class="fa fa-trash text-danger" aria-hidden="true" data-toggle="tooltip"
+                               data-placement="top" title="Remove"></i>
+                        </a>
                     </li>
                 {% endfor %}
+
             </ul>
         {% else %}
             <p>You don't have any deck yet</p>

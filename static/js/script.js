@@ -59,6 +59,8 @@ var Table = {
 
 
 $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+
     if (document.getElementById('dataTable')) {
         Table.init();
         Table.handle_cards()
