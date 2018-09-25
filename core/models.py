@@ -37,6 +37,12 @@ class Card(models.Model):
     def get_absolute_url(self):
         return reverse('card_detail', args=[str(self.id)])
 
+    def image(self):
+        return self.img_gold if self.img_gold is not None else self.img
+
+    def image_type(self):
+        return "img_gold" if self.img_gold is not None else "img"
+
     def __str__(self):
         return "[%s] - %s" % (self.card_id, self.name)
 
