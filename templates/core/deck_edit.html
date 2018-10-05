@@ -13,6 +13,12 @@
 
     <div class="container">
         <form class="form-signin" method="post">
+            {% if form.errors %}
+                <h2>Errors : </h2>
+                {{ form.errors }}
+                {{ form.fields.cards.all }}
+            {% endif %}
+
             {% csrf_token %}
             <div class="form-group">
                 <label>Deck Name</label>
@@ -37,8 +43,8 @@
                         <td>{{ card.card_set.name }}</td>
                         <td>
                             <label>
-                                <input type="checkbox" class="card-checkbox"
-                                       name="card[{{ card.id }}]" {{ card|checked_in:cards }}>
+                                <input type="checkbox" class="card-checkbox" name="cards" value="{{ card.id }}"
+                                        {{ card|checked_in:cards }}>
                             </label>
                         </td>
                     </tr>
@@ -55,8 +61,8 @@
                 </tr>
                 </tfoot>
             </table>
-        </form>
 
-        <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Send</button>
+            <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Send</button>
+        </form>
     </div>
 {% endblock %}
