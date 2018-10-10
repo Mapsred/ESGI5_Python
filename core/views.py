@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from accounts.models import Profile, Deck
 from core.forms import DeckForm
@@ -12,6 +12,18 @@ import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+class HomeView(TemplateView):
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'profile': Profile.objects.filter(user=self.request.user).first()
+        })
+
+        return context
 
 
 class CardListView(ListView):

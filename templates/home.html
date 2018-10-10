@@ -5,8 +5,15 @@
 {% block content %}
     <div class="container">
         {% if user.is_authenticated %}
-            Hi {{ user.username }}!
-            <p><a href="{% url 'logout' %}">logout</a></p>
+            <p>Hi {{ user.username }}!</p>
+            <p>Welcome to <b>PyStone</b> !</p>
+
+            <p>All the cards are in display in the <a href="{% url 'card_list' %}">card list</a>.</p>
+            <p>You can also see you existing <a href="{% url 'deck_list' %}">decks</a>.</p>
+            <p>You have {{ profile.credits }} credits.</p>
+            <p>You have {{ profile.cards.count }} cards.</p>
+            <p>Each deck of 8 cards costs <b>100</b> credits.</p>
+            <p>You can gain more credits by winning fights <i>(WIP)</i>.</p>
         {% else %}
             <p>You are not logged in</p>
             <a href="{% url 'login' %}">login</a>
