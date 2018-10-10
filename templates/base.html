@@ -17,6 +17,9 @@
 
 </head>
 <body class="bg-light {% block body-class %}{% endblock %}">
+    {% load core_tags %}
+    {% assign profile user|get_profile %}
+
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
     <a class="navbar-brand mr-auto mr-lg-0" href="{% url 'home' %}">PyStone</a>
     <button class="navbar-toggler p-0 border-0" type="button">
@@ -38,7 +41,7 @@
     <ul class="navbar-nav px-3">
         {% if user.is_authenticated %}
             <li>
-                <a class="nav-link" href="#">{{ user.username }}</a>
+                <a class="nav-link" href="#">{{ user.username }} ({{ profile.credits }} credits)</a>
             </li>
             <li class="nav-item text-nowrap">
                 <a class="nav-link" href="{% url 'logout' %}">Sign out</a>
@@ -60,7 +63,6 @@
     {% endblock %}
 
     {% block pagination %}
-        {% load core_tags %}
         {% if is_paginated %}
             <div class="container">
                 <nav>

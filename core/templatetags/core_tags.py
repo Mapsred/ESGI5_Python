@@ -1,5 +1,7 @@
 from django import template
 
+from accounts.models import Profile
+
 register = template.Library()
 
 
@@ -30,6 +32,11 @@ def checked_in(value, container):
 @register.filter(name="boostrap_input")
 def boostrap_input(value, col="col-md-6"):
     return value.as_widget(attrs={'class': 'form-control %s' % col})
+
+
+@register.filter(name="get_profile")
+def get_profile(user):
+    return Profile.objects.filter(user=user).first()
 
 
 class AssignNode(template.Node):
