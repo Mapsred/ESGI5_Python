@@ -5,6 +5,8 @@ $.fn.dataTable.ext.order['dom-checkbox'] = function (settings, col) {
 };
 
 var Table = {
+    MAX_CARDS: 30,
+
     init: function () {
         Table.initTable();
     },
@@ -41,7 +43,7 @@ var Table = {
         $('#dataTable_wrapper').on("click", ".card-checkbox", function (e) {
             $(this).is(":checked") ? checked_cards.push(e.target) : Table.remove_target(checked_cards, e.target);
 
-            if (checked_cards.length > 8) {
+            if (checked_cards.length > Table.MAX_CARDS) {
                 e.preventDefault();
                 Table.remove_target(checked_cards, e.target);
                 alert("Warning ! You can only have up to 8 cards in a deck !")

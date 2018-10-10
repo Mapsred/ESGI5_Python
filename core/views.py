@@ -1,10 +1,10 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from accounts.models import Profile
+from accounts.models import Profile, Deck
 from core.forms import DeckForm
-from core.models import Card, Deck
+from core.models import Card
 
 import logging
 
@@ -58,6 +58,12 @@ class DeckCreateView(CreateView):
     form_class = DeckForm
     context_object_name = 'deck'
 
+    def get_form_kwargs(self):
+        kwargs = super(DeckCreateView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+
+        return kwargs
+
     def form_valid(self, form):
         deck = form.save(commit=False)
         deck.profile = Profile.objects.filter(user=self.request.user).first()
@@ -72,6 +78,12 @@ class DeckUpdateView(UpdateView):
     success_url = reverse_lazy('deck_list')
     context_object_name = 'deck'
     form_class = DeckForm
+
+    def get_form_kwargs(self):
+        kwargs = super(DeckUpdateView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+
+        return kwargs
 
     def get_queryset(self):
         profile = Profile.objects.filter(user=self.request.user).first()

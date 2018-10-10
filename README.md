@@ -11,8 +11,8 @@ docker-compose up -d
 docker-compose exec web bash
 
 python manage.py migrate
-python manage.py createsuperuser
 python manage.py create_cards
+python manage.py createsuperuser
 
 
 ```
