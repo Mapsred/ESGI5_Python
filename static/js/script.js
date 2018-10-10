@@ -63,6 +63,20 @@ var Table = {
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
+    $('[data-toggle=popover-img]').popover({
+        html: true,
+        trigger: 'hover',
+        template: '' +
+            '<div class="popover popover-img" role="tooltip">' +
+            '   <h3 class="popover-header"></h3>' +
+            '   <div class="popover-body"></div>' +
+            '</div>',
+        content: function () {
+            return '<img src="' + $(this).data('img') + '" />';
+        }
+    });
+
+
     if (document.getElementById('dataTable')) {
         Table.init();
         Table.handle_cards()
