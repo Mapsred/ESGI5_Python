@@ -1,5 +1,7 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from accounts.models import Profile, Deck
@@ -19,6 +21,10 @@ class CardListView(ListView):
     queryset = Card.objects.all()
     paginate_by = 25
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
 
 class CardDetailView(DetailView):
     model = Card
@@ -28,6 +34,10 @@ class CardDetailView(DetailView):
         card = get_object_or_404(Card, pk=primary_key)
 
         return render(request, 'core/card_detail.html', context={'card': card})
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 class DeckListView(ListView):
@@ -41,15 +51,23 @@ class DeckListView(ListView):
 
         return Deck.objects.filter(profile=profile)
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
 
 class DeckDetailView(DetailView):
     model = Deck
+    template_name = "core/deck_detail.html"
 
-    @staticmethod
-    def deck_detail_view(request, primary_key):
-        deck = get_object_or_404(Deck, pk=primary_key)
+    def get_queryset(self):
+        profile = Profile.objects.filter(user=self.request.user).first()
 
-        return render(request, 'core/deck_detail.html', context={'deck': deck})
+        return Deck.objects.filter(profile=profile)
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 class DeckCreateView(CreateView):
@@ -72,6 +90,10 @@ class DeckCreateView(CreateView):
 
         return super().form_valid(form)
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
 
 class DeckUpdateView(UpdateView):
     template_name = 'core/deck_edit.html'
@@ -90,7 +112,15 @@ class DeckUpdateView(UpdateView):
 
         return Deck.objects.filter(profile=profile)
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
 
 class DeckDelete(DeleteView):
     model = Deck
     success_url = reverse_lazy('deck_list')
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)

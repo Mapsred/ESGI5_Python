@@ -29,6 +29,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'card_list' %}">Card List</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'deck_list' %}">My Decks</a>
+                </li>
             {% endif %}
         </ul>
     </div>
@@ -58,8 +61,7 @@
 
     {% block pagination %}
         {% load core_tags %}
-
-        {% if is_paginated is defined and is_paginated %}
+        {% if is_paginated %}
             <div class="container">
                 <nav>
                     <ul class="pagination justify-content-center">
