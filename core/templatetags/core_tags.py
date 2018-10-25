@@ -1,4 +1,5 @@
 from django import template
+from django.contrib.messages import constants
 
 from accounts.models import Profile
 
@@ -66,3 +67,14 @@ def do_assign(parser, token):
     value = parser.compile_filter(bits[2])
 
     return AssignNode(bits[1], value)
+
+
+@register.filter(name="get_flash_class")
+def get_flash_class(value):
+    return {
+        constants.DEBUG: 'primary',
+        constants.SUCCESS: 'success',
+        constants.ERROR: 'danger',
+        constants.WARNING: 'warning',
+        constants.INFO: 'info',
+    }.get(value, 'primary')

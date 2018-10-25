@@ -3,6 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.shortcuts import redirect
+from django.contrib import messages
 
 from accounts.models import Profile, Deck
 from core.forms import DeckForm
@@ -96,6 +98,12 @@ class DeckCreateView(CreateView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        profile = Profile.objects.filter(user=self.request.user).first()
+        if profile.credits < 30:
+            messages.error(request, 'You need to have more than 30 credits to create a Deck.')
+
+            return redirect('home')
+
         return super().dispatch(request, *args, **kwargs)
 
 
