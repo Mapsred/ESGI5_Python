@@ -1,6 +1,6 @@
 from django import forms
 
-from accounts.models import Deck, Profile, PlayerCard
+from accounts.models import Deck
 
 
 class DeckForm(forms.ModelForm):
@@ -10,9 +10,3 @@ class DeckForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
         }
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
-        super(DeckForm, self).__init__(*args, **kwargs)
-        profile = Profile.objects.filter(user=user).first()
-        self.fields['cards'].queryset = PlayerCard.objects.filter(profile=profile)

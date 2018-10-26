@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.db.models import Sum
 
-from accounts.models import Profile, Deck, PlayerCard
+from accounts.models import Profile, Deck, PlayerCard, DeckCard
 from core.forms import DeckForm
 from core.models import Card
 
@@ -83,6 +83,11 @@ class DeckDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        kwargs['cards'] = DeckCard.objects.filter(deck=kwargs['object'])
+
+        return super().get_context_data(**kwargs)
+
 
 class DeckCreateView(CreateView):
     template_name = 'core/deck_edit.html'
@@ -90,47 +95,101 @@ class DeckCreateView(CreateView):
     form_class = DeckForm
     context_object_name = 'deck'
 
-    def get_form_kwargs(self):
-        kwargs = super(DeckCreateView, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user})
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
-        return kwargs
+    def get_context_data(self, **kwargs):
+        profile = Profile.objects.filter(user=self.request.user).first()
 
-    def form_valid(self, form):
+        card_list = PlayerCard.objects.filter(profilePlayer=profile)
+
+        kwargs.update({'card_list': card_list, 'deck_cards': None})
+
+        return super().get_context_data(**kwargs)
+
+    def _create_deck(self, form, request):
+        profile = Profile.objects.filter(user=self.request.user).first()
+
         deck = form.save(commit=False)
         deck.profile = Profile.objects.filter(user=self.request.user).first()
         deck.save()
-        form.save_m2m()
 
-        return super().form_valid(form)
+        cards = request.POST.getlist('cards')
+        for card in cards:
+            player_card = PlayerCard.objects.filter(cardPlayer=card, profilePlayer=profile).first()
+            card = player_card.cardPlayer
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        profile = Profile.objects.filter(user=self.request.user).first()
-        if profile.credits < 30:
-            messages.error(request, 'You need to have more than 30 credits to create a Deck.')
+            deck_card = DeckCard.objects.filter(cardPlayer=card, deck=deck).first()
+            if not deck_card:
+                deck_card = DeckCard(cardPlayer=card, deck=deck, numbercards=0)
 
-            return redirect('home')
+            deck_card.numbercards += 1
+            deck_card.save()
 
-        return super().dispatch(request, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            self._create_deck(form, request)
+
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
+# noinspection PyAttributeOutsideInit
 class DeckUpdateView(UpdateView):
     template_name = 'core/deck_edit.html'
     success_url = reverse_lazy('deck_list')
     context_object_name = 'deck'
     form_class = DeckForm
 
-    def get_form_kwargs(self):
-        kwargs = super(DeckUpdateView, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user})
-
-        return kwargs
-
     def get_queryset(self):
         profile = Profile.objects.filter(user=self.request.user).first()
 
         return Deck.objects.filter(profile=profile)
+
+    def get_context_data(self, **kwargs):
+        profile = Profile.objects.filter(user=self.request.user).first()
+
+        card_list = PlayerCard.objects.filter(profilePlayer=profile)
+        deck_cards = DeckCard.objects.filter(deck=self.object)
+
+        kwargs.update({'card_list': card_list, 'deck_cards': deck_cards})
+
+        return super().get_context_data(**kwargs)
+
+    def _update_deck(self, form, request):
+        profile = Profile.objects.filter(user=self.request.user).first()
+
+        self.object = form.save()
+        cards = request.POST.getlist('cards')
+        deck_cards = DeckCard.objects.filter(deck=self.object)
+
+        for deck_card in deck_cards:
+            if str(deck_card.cardPlayer.id) not in cards:
+                deck_card.delete()
+
+        for card in cards:
+            player_card = PlayerCard.objects.filter(cardPlayer=card, profilePlayer=profile).first()
+            card = player_card.cardPlayer
+
+            deck_card = DeckCard.objects.filter(cardPlayer=card, deck=self.object).first()
+            if not deck_card:
+                deck_card = DeckCard(cardPlayer=card, deck=self.object, numbercards=1)
+
+            deck_card.save()
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        form = self.get_form()
+        if form.is_valid():
+            self._update_deck(form, request)
+
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):

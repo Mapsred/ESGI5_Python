@@ -25,9 +25,14 @@ def type_of(value):
     return type(value)
 
 
-@register.filter(name="checked_in")
-def checked_in(value, container):
-    return "checked" if container is not None and value in container else ""
+@register.filter(name="checked_in_card_deck")
+def checked_in_card_deck(value, container):
+    if container is not None:
+        for card in container:
+            if value == card.cardPlayer:
+                return "checked"
+
+    return ""
 
 
 @register.filter(name="boostrap_input")
