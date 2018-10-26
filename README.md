@@ -7,7 +7,7 @@ How to ...
 ### Initiate the project
 
 ```bash
-docker-compose up -d
+docker-compose up --build -d
 docker-compose exec web bash
 
 python manage.py migrate
@@ -15,7 +15,7 @@ python manage.py createsuperuser
 
 
 ```
-
+CTRL + D to quit
 
 #### Some ressources
 https://docs.djangoproject.com/en/2.1/intro/tutorial01/
