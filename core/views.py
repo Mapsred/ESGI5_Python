@@ -1,12 +1,15 @@
-import sys
-
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from accounts.models import Profile
 from core.forms import DeckForm
 from core.models import Card, Deck
+
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 class CardListView(ListView):
@@ -50,19 +53,24 @@ class DeckDetailView(DetailView):
 
 
 class DeckCreateView(CreateView):
-    # model = Deck
     template_name = 'core/deck_edit.html'
     success_url = reverse_lazy('deck_list')
     form_class = DeckForm
     context_object_name = 'deck'
 
+    def form_valid(self, form):
+        deck = form.save(commit=False)
+        deck.profile = Profile.objects.filter(user=self.request.user).first()
+        deck.save()
+        form.save_m2m()
+
+        return super().form_valid(form)
+
 
 class DeckUpdateView(UpdateView):
-    # model = Deck
     template_name = 'core/deck_edit.html'
     success_url = reverse_lazy('deck_list')
     context_object_name = 'deck'
-    # fields = ['name', 'cards']
     form_class = DeckForm
 
     def get_queryset(self):

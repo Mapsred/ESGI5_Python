@@ -56,10 +56,4 @@ class Deck(models.Model):
         return reverse('deck_detail', args=[str(self.id)])
 
     def __str__(self):
-        return "%s (%s)" % (self.name, self.cards.count())
-
-
-@receiver(pre_save, sender=Deck)
-def pre_save_deck(sender, instance, **kwargs):
-    if 8 > instance.cards.count():
-        raise AttributeError("A deck cannot have more than 8 cards !")
+        return self.name
