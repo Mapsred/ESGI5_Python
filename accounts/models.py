@@ -19,7 +19,6 @@ class Profile(models.Model):
 class Deck(models.Model):
     name = models.CharField(max_length=256, default=None, blank=True, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    cards = models.ManyToManyField(Card)
 
     def get_absolute_url(self):
         return reverse('deck_detail', args=[str(self.id)])
@@ -30,6 +29,12 @@ class Deck(models.Model):
 
 class PlayerCard(models.Model):
     profilePlayer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    cardPlayer = models.ForeignKey(Card, on_delete=models.CASCADE)
+    numbercards = models.IntegerField(default=0)
+
+
+class DeckCard(models.Model):
+    deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
     cardPlayer = models.ForeignKey(Card, on_delete=models.CASCADE)
     numbercards = models.IntegerField(default=0)
 

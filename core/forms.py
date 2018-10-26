@@ -1,13 +1,12 @@
 from django import forms
 
-from accounts.models import Deck, Profile
-from core.models import Card
+from accounts.models import Deck, Profile, PlayerCard
 
 
 class DeckForm(forms.ModelForm):
     class Meta:
         model = Deck
-        fields = ['name', 'cards']
+        fields = ['name']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -16,4 +15,4 @@ class DeckForm(forms.ModelForm):
         user = kwargs.pop('user')
         super(DeckForm, self).__init__(*args, **kwargs)
         profile = Profile.objects.filter(user=user).first()
-        self.fields['cards'].queryset = Card.objects.filter(profile=profile)
+        self.fields['cards'].queryset = PlayerCard.objects.filter(profile=profile)
