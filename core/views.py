@@ -144,3 +144,23 @@ class DeckDelete(DeleteView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+
+
+class ShopView(TemplateView):
+    template_name = 'core/shop.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.filter(user=self.request.user).first()
+            kwargs['number_cards'] = PlayerCard.objects.filter(profilePlayer=profile).aggregate(Sum("numbercards"))
+        return super().dispatch(request, *args, **kwargs)
+
+
+class Pay2WinView(TemplateView):
+    template_name = 'core/realmoneyshop.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.filter(user=self.request.user).first()
+            kwargs['number_cards'] = PlayerCard.objects.filter(profilePlayer=profile).aggregate(Sum("numbercards"))
+        return super().dispatch(request, *args, **kwargs)
