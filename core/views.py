@@ -5,8 +5,9 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.db.models import Sum
 
-from accounts.models import Profile, Deck
+from accounts.models import Profile, Deck, PlayerCard
 from core.forms import DeckForm
 from core.models import Card
 
@@ -18,6 +19,13 @@ logger = logging.getLogger(__name__)
 
 class HomeView(TemplateView):
     template_name = 'home.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.filter(user=self.request.user).first()
+            kwargs['number_cards'] = PlayerCard.objects.filter(profilePlayer=profile).aggregate(Sum("numbercards"))
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 class CardListView(ListView):
