@@ -10,4 +10,6 @@ urlpatterns = [
     path('decks/<int:pk>', views.DeckDetailView.as_view(), name='deck_detail'),
     path('decks/add/', views.DeckCreateView.as_view(), name='deck_add'),
     path('decks/<int:pk>/edit', views.DeckUpdateView.as_view(), name='deck_edit'),
+    path('shop/', views.ShopView.as_view(), name='shop'),
+    path('realmoneyshop/', views.Pay2WinView.as_view(), name='realmoneyshop'),
 ]
