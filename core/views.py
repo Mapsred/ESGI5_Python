@@ -3,8 +3,6 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from django.shortcuts import redirect
-from django.contrib import messages
 from django.db.models import Sum
 
 from accounts.models import Profile, Deck, PlayerCard, DeckCard
