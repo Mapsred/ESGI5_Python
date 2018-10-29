@@ -5,16 +5,14 @@ $.fn.dataTable.ext.order['dom-checkbox'] = function (settings, col) {
 };
 
 var Table = {
-    MAX_CARDS: 30,
-
     init: function () {
         Table.initTable();
     },
 
     initTable: function () {
         $('#dataTable tfoot th').each(function () {
-            let title = $(this).text();
-            let disabled = $(this).hasClass('disabled') ? 'disabled' : '';
+            var title = $(this).text();
+            var disabled = $(this).hasClass('disabled') ? 'disabled' : '';
 
             $(this).html('<input type="text" class="form-control column_search" style="width: 100%" ' +
                 'placeholder="' + title + '" ' + disabled + ' />');
@@ -28,35 +26,49 @@ var Table = {
             "sPaginationType": "full_numbers",
             "pagingType": "full_numbers",
             "aoColumns": [null, null, null, null, {'sSortDataType': "dom-checkbox"}]
-
         });
 
         $('#dataTable_wrapper').on('keyup', ".column_search", function () {
             Table.table.column($(this).parent().index()).search(this.value).draw();
         });
+    }
+};
 
-    },
+
+var TableCards = {
+    MAX_CARDS: 30,
+
+    total: 0,
+    cards: {},
 
     handle_cards: function () {
-        var checked_cards = $(".card-checkbox:checkbox:checked").toArray();
+        TableCards.fill_checked_cards();
+        TableCards.cards_total();
 
-        $('#dataTable_wrapper').on("click", ".card-checkbox", function (e) {
-            $(this).is(":checked") ? checked_cards.push(e.target) : Table.remove_target(checked_cards, e.target);
-
-            if (checked_cards.length > Table.MAX_CARDS) {
+        $('#dataTable_wrapper').on("change", ".card_count", function (e) {
+            TableCards.fill_checked_cards();
+            TableCards.cards_total();
+            if (TableCards.total > TableCards.MAX_CARDS) {
                 e.preventDefault();
-                Table.remove_target(checked_cards, e.target);
-                alert("Warning ! You can only have up to 8 cards in a deck !")
+                alert("Warning ! You can only have up to" + TableCards.MAX_CARDS + " cards in a deck !")
             }
         });
     },
 
-    remove_target: function (checked_cards, target) {
-        var index = checked_cards.indexOf(target);
-        if (index > -1) {
-            checked_cards.splice(index, 1);
-        }
+    fill_checked_cards: function () {
+        $("input.card_count").each(function () {
+            var tr = $(this).parent().parent().parent();
+            var name = tr.children("td").first().text();
+            TableCards.cards[name] = $(this).val();
+        });
     },
+
+    cards_total: function () {
+        TableCards.total = 0;
+        $.each(TableCards.cards, function (card, nb) {
+            TableCards.total += parseInt(nb);
+        });
+    }
 };
 
 
@@ -79,6 +91,6 @@ $(document).ready(function () {
 
     if (document.getElementById('dataTable')) {
         Table.init();
-        Table.handle_cards()
+        TableCards.handle_cards()
     }
 });

@@ -17,7 +17,7 @@ python manage.py createsuperuser
 
 If you want to make migrations :
 
-```
+```bash
 python manage.py makemigrations
 ```
 

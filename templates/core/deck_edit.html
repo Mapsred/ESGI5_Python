@@ -26,7 +26,7 @@
                     <th>Health</th>
                     <th>Attack</th>
                     <th>Set name</th>
-                    <th>Action</th>
+                    <th>Nombre</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -37,9 +37,10 @@
                         <td>{{ card.cardPlayer.attack }}</td>
                         <td>{{ card.cardPlayer.card_set.name }}</td>
                         <td>
-                            <label class="col-md-12 pointer">
-                                <input type="checkbox" class="card-checkbox" name="cards" value="{{ card.cardPlayer.id }}"
-                                        {{ card.cardPlayer|checked_in_card_deck:deck_cards }}>
+                            <label class="col-md-12">
+                                <input type="number" name="card_count" class="form-control card_count"
+                                       value="{{ card.cardPlayer|checked_in_card_deck:deck_cards }}"
+                                       min=0 max="{{ card.numbercards }}">
                             </label>
                         </td>
                     </tr>

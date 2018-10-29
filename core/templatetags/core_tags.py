@@ -28,11 +28,13 @@ def type_of(value):
 @register.filter(name="checked_in_card_deck")
 def checked_in_card_deck(value, container):
     if container is not None:
+        print(value)
         for card in container:
             if value == card.cardPlayer:
-                return "checked"
+                print(card.numbercards)
+                return card.numbercards
 
-    return ""
+    return 0
 
 
 @register.filter(name="boostrap_input")
