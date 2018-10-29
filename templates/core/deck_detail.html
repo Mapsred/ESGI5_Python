@@ -18,7 +18,7 @@
 
             {% for card in cards.all %}
                 <div class="col-md-6">
-                    {% include "core/part/card.html" with card=card.cardPlayer %}
+                    {% include "core/part/card.html" with card=card.cardPlayer number=card.numbercards %}
                 </div>
             {% endfor %}
         </div>
