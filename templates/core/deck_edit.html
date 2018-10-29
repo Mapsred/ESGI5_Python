@@ -41,6 +41,7 @@
                                 <input type="number" name="card_count" class="form-control card_count"
                                        value="{{ card.cardPlayer|checked_in_card_deck:deck_cards }}"
                                        min=0 max="{{ card.numbercards }}">
+                                <input type="hidden" name="card_id" value="{{ card.cardPlayer.id }}">
                             </label>
                         </td>
                     </tr>

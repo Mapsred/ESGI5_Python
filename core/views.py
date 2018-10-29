@@ -113,16 +113,21 @@ class DeckCreateView(CreateView):
         deck.profile = Profile.objects.filter(user=self.request.user).first()
         deck.save()
 
-        cards = request.POST.getlist('cards')
-        for card in cards:
-            player_card = PlayerCard.objects.filter(cardPlayer=card, profilePlayer=profile).first()
+        cards = dict(zip(request.POST.getlist('card_id'), request.POST.getlist('card_count')))
+        for card_id, card_nb in cards.items():
+            card_nb = int(card_nb)
+
+            if card_nb == 0:
+                continue
+
+            player_card = PlayerCard.objects.filter(cardPlayer=card_id, profilePlayer=profile).first()
             card = player_card.cardPlayer
 
             deck_card = DeckCard.objects.filter(cardPlayer=card, deck=deck).first()
             if not deck_card:
                 deck_card = DeckCard(cardPlayer=card, deck=deck, numbercards=0)
 
-            deck_card.numbercards += 1
+            deck_card.numbercards = card_nb
             deck_card.save()
 
     def post(self, request, *args, **kwargs):
@@ -161,21 +166,24 @@ class DeckUpdateView(UpdateView):
         profile = Profile.objects.filter(user=self.request.user).first()
 
         self.object = form.save()
-        cards = request.POST.getlist('cards')
-        deck_cards = DeckCard.objects.filter(deck=self.object)
 
-        for deck_card in deck_cards:
-            if str(deck_card.cardPlayer.id) not in cards:
-                deck_card.delete()
-
-        for card in cards:
-            player_card = PlayerCard.objects.filter(cardPlayer=card, profilePlayer=profile).first()
+        cards = dict(zip(request.POST.getlist('card_id'), request.POST.getlist('card_count')))
+        for card_id, card_nb in cards.items():
+            player_card = PlayerCard.objects.filter(cardPlayer=card_id, profilePlayer=profile).first()
             card = player_card.cardPlayer
 
             deck_card = DeckCard.objects.filter(cardPlayer=card, deck=self.object).first()
-            if not deck_card:
-                deck_card = DeckCard(cardPlayer=card, deck=self.object, numbercards=1)
 
+            card_nb = int(card_nb)
+            if card_nb == 0:
+                if deck_card:
+                    deck_card.delete()
+                continue
+
+            if not deck_card:
+                deck_card = DeckCard(cardPlayer=card, deck=self.object, numbercards=0)
+
+            deck_card.numbercards = card_nb
             deck_card.save()
 
     def post(self, request, *args, **kwargs):
