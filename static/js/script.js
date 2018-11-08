@@ -11,8 +11,8 @@ var Table = {
 
     initTable: function () {
         $('#dataTable tfoot th').each(function () {
-            let title = $(this).text();
-            let disabled = $(this).hasClass('disabled') ? 'disabled' : '';
+            var title = $(this).text();
+            var disabled = $(this).hasClass('disabled') ? 'disabled' : '';
 
             $(this).html('<input type="text" class="form-control column_search" style="width: 100%" ' +
                 'placeholder="' + title + '" ' + disabled + ' />');
@@ -41,10 +41,10 @@ var Table = {
         $('#dataTable_wrapper').on("click", ".card-checkbox", function (e) {
             $(this).is(":checked") ? checked_cards.push(e.target) : Table.remove_target(checked_cards, e.target);
 
-            if (checked_cards.length > 8) {
+            if (checked_cards.length > 30) {
                 e.preventDefault();
                 Table.remove_target(checked_cards, e.target);
-                alert("Warning ! You can only have up to 8 cards in a deck !")
+                alert("Warning ! You can only have up to 30 cards in a deck !")
             }
         });
     },
@@ -54,7 +54,7 @@ var Table = {
         if (index > -1) {
             checked_cards.splice(index, 1);
         }
-    },
+    }
 };
 
 
