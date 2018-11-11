@@ -10,7 +10,11 @@
             <ul class="list-group">
                 {% for deck in deck_list %}
                     <li class="list-group-item">
-                        Deck {{ deck }} :
+                        {% if deck is defined %}
+                            Deck {{ deck }} :
+                        {% else %}
+                            Deck :
+                        {% endif %}
                         <a href="{% url "deck_detail" deck.id %}">
                             <i class="fa fa-eye text-primary" aria-hidden="true" data-toggle="tooltip"
                                data-placement="top" title="View"></i>
