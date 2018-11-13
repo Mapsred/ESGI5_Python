@@ -4,8 +4,13 @@
 
 {% block content %}
     <div class="container">
-        <div class="col-md-6">
-            This is the page for the real money shop
-        </div>
+            <div class="jumbotron">
+              <h1 class="display-3">Hello, you need some coins?!</h1>
+              <p class="lead">If you want some coins, you can use your best card : Blue card</p>
+              <hr class="my-4">
+                {% load static %}
+                <img src="{% static "images/tresor-euro.jpg" %}" style="width: 500px;" alt="My image">
+                <img src="{% static "images/tresor-note.jpg" %}" style="width: 500px;" alt="My image">
+            </div>
     </div>
 {% endblock %}

@@ -4,8 +4,14 @@
 
 {% block content %}
     <div class="container">
-        <div class="col-md-6">
-            This is the page for the shop
-        </div>
+            <div class="jumbotron">
+              <h1 class="display-3">Hello, you need some cards?!</h1>
+              <p class="lead">If you want some cards, you can buy boxes with multiple random card.</p>
+              <hr class="my-4">
+              <p>You will need some money. If you don't have money try to won a game on pvp or by buying extra coin from the  <a class="btn btn-primary" href="{% url "realmoneyshop" %}">P2winshop</a></p>
+                {% load static %}
+                <img src="{% static "images/tresor-piecedor100.jpg" %}" style="width: 500px;" alt="My image">
+                <img src="{% static "images/tresor-piecedor500.jpg" %}" style="width: 500px;" alt="My image">
+            </div>
     </div>
 {% endblock %}
