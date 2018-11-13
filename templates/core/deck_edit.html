@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block title %}{% endblock %}
 
 {% block content %}
@@ -22,9 +21,9 @@
             <div class="form-group">
                 <label for="cards_select">Cards</label>
                 <select name="cards" id="cards_select" class="form-control" multiple>
-                    {% for card in card_list %}
-                        <option value="{{ card.id }}"
-                                data-img="{{ card.cardPlayer.img }}">{{ card.cardPlayer.name }}</option>
+                    {% for player_card in player_card_list %}
+                        <option value="{{ player_card.id }}" {{ player_card|is_card_in_deck:deck_cards }}
+                                data-img="{{ player_card.card.img }}">{{ player_card.card.name }}</option>
                     {% endfor %}
                 </select>
 
