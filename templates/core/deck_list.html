@@ -5,30 +5,32 @@
 {% block content %}
     <div class="container">
         <h1>Deck List</h1>
-        <a href="{% url "deck_add" %}">Creér un deck</a>
-        {% if deck_list %}
-            <ul class="list-group">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if deck_list %}
                 {% for deck in deck_list %}
-                    <li class="list-group-item">
-                        Deck {{ deck }} :
-                        <a href="{% url "deck_detail" deck.id %}">
-                            <i class="fa fa-eye text-primary" aria-hidden="true" data-toggle="tooltip"
-                               data-placement="top" title="View"></i>
-                        </a>
-                        <a href="{% url "deck_edit" deck.id %}">
-                            <i class="fa fa-pencil text-warning" aria-hidden="true" data-toggle="tooltip"
-                               data-placement="top" title="Edit"></i>
-                        </a>
-                        <a href="#">
-                            <i class="fa fa-trash text-danger" aria-hidden="true" data-toggle="tooltip"
-                               data-placement="top" title="Remove"></i>
-                        </a>
-                    </li>
+                    <tr>
+                        <td>{{ deck.name }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="{% url "deck_detail" deck.id %}">View</a>
+                            <a class="btn btn-warning" href="{% url "deck_edit" deck.id %}">Edit</a>
+                            <a class="btn btn-danger" href="#">Delete</a>
+                        </td>
+                    </tr>
                 {% endfor %}
-
-            </ul>
-        {% else %}
-            <p>You don't have any deck yet</p>
-        {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="2">no records found</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        <a class="btn btn-info mb-2" href="{% url "deck_add" %}">Create a deck</a>
     </div>
 {% endblock %}

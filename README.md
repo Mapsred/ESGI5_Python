@@ -11,12 +11,15 @@ docker-compose up -d
 docker-compose exec web bash
 
 python manage.py migrate
-python manage.py createsuperuser
 python manage.py create_cards
-
-
+python manage.py createsuperuser
 ```
 
+If you want to make migrations :
+
+```bash
+python manage.py makemigrations
+```
 
 #### Some ressources
 https://docs.djangoproject.com/en/2.1/intro/tutorial01/

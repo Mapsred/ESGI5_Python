@@ -27,7 +27,7 @@ SECRET_KEY = 'yv400stsa!y$)y9rkee34i$z+ea@=6*_n8%_xqbtyd^mli166g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["pystone.develop"]
+ALLOWED_HOSTS = ["pystone.develop", "127.0.0.1"]
 
 # Application definition
 

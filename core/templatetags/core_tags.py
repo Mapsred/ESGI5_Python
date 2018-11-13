@@ -1,4 +1,7 @@
 from django import template
+from django.contrib.messages import constants
+
+from accounts.models import Profile
 
 register = template.Library()
 
@@ -22,14 +25,26 @@ def type_of(value):
     return type(value)
 
 
-@register.filter(name="checked_in")
-def checked_in(value, container):
-    return "checked" if container is not None and value in container else ""
+@register.filter(name="checked_in_card_deck")
+def checked_in_card_deck(value, container):
+    if container is not None:
+        print(value)
+        for card in container:
+            if value == card.cardPlayer:
+                print(card.numbercards)
+                return card.numbercards
+
+    return 0
 
 
 @register.filter(name="boostrap_input")
 def boostrap_input(value, col="col-md-6"):
     return value.as_widget(attrs={'class': 'form-control %s' % col})
+
+
+@register.filter(name="get_profile")
+def get_profile(user):
+    return Profile.objects.filter(user=user).first()
 
 
 class AssignNode(template.Node):
@@ -59,3 +74,14 @@ def do_assign(parser, token):
     value = parser.compile_filter(bits[2])
 
     return AssignNode(bits[1], value)
+
+
+@register.filter(name="get_flash_class")
+def get_flash_class(value):
+    return {
+        constants.DEBUG: 'primary',
+        constants.SUCCESS: 'success',
+        constants.ERROR: 'danger',
+        constants.WARNING: 'warning',
+        constants.INFO: 'info',
+    }.get(value, 'primary')

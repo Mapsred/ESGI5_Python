@@ -9,7 +9,7 @@
             <ul>
                 {% for card in card_list %}
                     <li>
-                        <a href="{{ card.get_absolute_url }}">{{ card }}</a>
+                        <a href="{{ card.get_absolute_url }}" data-toggle="popover-img" data-img="{{ card.img }}">{{ card }}</a>
                     </li>
                 {% endfor %}
             </ul>

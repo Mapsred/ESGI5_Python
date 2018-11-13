@@ -1,12 +1,12 @@
 from django import forms
 
-from core.models import Deck
+from accounts.models import Deck
 
 
 class DeckForm(forms.ModelForm):
     class Meta:
         model = Deck
-        fields = ['name', 'cards']
+        fields = ['name']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
         }

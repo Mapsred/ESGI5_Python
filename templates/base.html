@@ -17,6 +17,11 @@
 
 </head>
 <body class="bg-light {% block body-class %}{% endblock %}">
+{% load core_tags %}
+{% if user.is_authenticated %}
+    {% assign profile user|get_profile %}
+{% endif %}
+
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
     <a class="navbar-brand mr-auto mr-lg-0" href="{% url 'home' %}">PyStone</a>
     <button class="navbar-toggler p-0 border-0" type="button">
@@ -32,13 +37,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'deck_list' %}">My Decks</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+                </li>
             {% endif %}
         </ul>
     </div>
     <ul class="navbar-nav px-3">
         {% if user.is_authenticated %}
             <li>
+                <!-- Will return a modification profil page -->
                 <a class="nav-link" href="#">{{ user.username }}</a>
+            </li>
+            <li class="nav-item">
+                <!-- Will return a page where you can buy credit vs real money -->
+                <a class="nav-link" href="{% url 'realmoneyshop' %}">{{ profile.credits }} credits</a>
             </li>
             <li class="nav-item text-nowrap">
                 <a class="nav-link" href="{% url 'logout' %}">Sign out</a>
@@ -56,12 +69,20 @@
 </nav>
 
 <main>
+    {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|get_flash_class }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     {% block content %}
     {% endblock %}
 
     {% block pagination %}
-        {% load core_tags %}
-
         {% if is_paginated %}
             <div class="container">
                 <nav>

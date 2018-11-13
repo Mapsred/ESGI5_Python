@@ -16,9 +16,9 @@
                 <a href="#">Supprimer le deck</a>
             </div>
 
-            {% for card in deck.cards.all %}
+            {% for card in cards.all %}
                 <div class="col-md-6">
-                    {% include "core/part/card.html" with card=card %}
+                    {% include "core/part/card.html" with card=card.cardPlayer number=card.numbercards %}
                 </div>
             {% endfor %}
         </div>

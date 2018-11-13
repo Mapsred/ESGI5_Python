@@ -2,5 +2,14 @@ body {
     background-color: red;
     min-height: 75rem;
     padding-top: 4.5rem;
+}
 
+
+.popover-img, .popover-img .arrow:after {
+    background: none;
+    border: none;
+}
+
+.pointer {
+    cursor: pointer;
 }

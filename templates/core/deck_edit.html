@@ -6,11 +6,6 @@
 {% block content %}
     {% load core_tags %}
 
-    {% assign cards None %}
-    {% if deck != None %}
-        {% assign cards deck.cards.all %}
-    {% endif %}
-
     <div class="container">
         <form class="form-signin" method="post">
             {% if form.errors %}
@@ -31,20 +26,22 @@
                     <th>Health</th>
                     <th>Attack</th>
                     <th>Set name</th>
-                    <th>Action</th>
+                    <th>Number</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for card in form.fields.cards.queryset %}
+                {% for card in card_list %}
                     <tr>
-                        <td>{{ card.name }}</td>
-                        <td>{{ card.health }}</td>
-                        <td>{{ card.attack }}</td>
-                        <td>{{ card.card_set.name }}</td>
+                        <td data-toggle="popover-img" data-img="{{ card.cardPlayer.img }}">{{ card.cardPlayer.name }}</td>
+                        <td>{{ card.cardPlayer.health }}</td>
+                        <td>{{ card.cardPlayer.attack }}</td>
+                        <td>{{ card.cardPlayer.card_set.name }}</td>
                         <td>
-                            <label>
-                                <input type="checkbox" class="card-checkbox" name="cards" value="{{ card.id }}"
-                                        {{ card|checked_in:cards }}>
+                            <label class="col-md-12">
+                                <input type="number" name="card_count" class="form-control card_count"
+                                       value="{{ card.cardPlayer|checked_in_card_deck:deck_cards }}"
+                                       min=0 max="{{ card.numbercards }}">
+                                <input type="hidden" name="card_id" value="{{ card.cardPlayer.id }}">
                             </label>
                         </td>
                     </tr>
