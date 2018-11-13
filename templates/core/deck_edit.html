@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block title %}{% endblock %}
 
 {% block content %}
@@ -19,45 +18,16 @@
                 <label>Deck Name</label>
                 {{ form.name|boostrap_input }}
             </div>
-            <table class="table table-bordered table-striped" id="dataTable">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Health</th>
-                    <th>Attack</th>
-                    <th>Set name</th>
-                    <th>Number</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for card in card_list %}
-                    <tr>
-                        <td data-toggle="popover-img" data-img="{{ card.cardPlayer.img }}">{{ card.cardPlayer.name }}</td>
-                        <td>{{ card.cardPlayer.health }}</td>
-                        <td>{{ card.cardPlayer.attack }}</td>
-                        <td>{{ card.cardPlayer.card_set.name }}</td>
-                        <td>
-                            <label class="col-md-12">
-                                <input type="number" name="card_count" class="form-control card_count"
-                                       value="{{ card.cardPlayer|checked_in_card_deck:deck_cards }}"
-                                       min=0 max="{{ card.numbercards }}">
-                                <input type="hidden" name="card_id" value="{{ card.cardPlayer.id }}">
-                            </label>
-                        </td>
-                    </tr>
-                {% endfor %}
+            <div class="form-group">
+                <label for="cards_select">Cards</label>
+                <select name="cards" id="cards_select" class="form-control" multiple>
+                    {% for player_card in player_card_list %}
+                        <option value="{{ player_card.id }}" {{ player_card|is_card_in_deck:deck_cards }}
+                                data-img="{{ player_card.card.img }}">{{ player_card.card.name }}</option>
+                    {% endfor %}
+                </select>
 
-                </tbody>
-                <tfoot>
-                <tr>
-                    <th>Name</th>
-                    <th>Health</th>
-                    <th>Attack</th>
-                    <th>Set name</th>
-                    <th>Action</th>
-                </tr>
-                </tfoot>
-            </table>
+            </div>
 
             <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Send</button>
         </form>

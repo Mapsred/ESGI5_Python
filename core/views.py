@@ -3,7 +3,6 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from django.db.models import Sum
 
 from accounts.models import Profile, Deck, PlayerCard, DeckCard
 from core.forms import DeckForm
@@ -21,7 +20,7 @@ class HomeView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             profile = Profile.objects.filter(user=self.request.user).first()
-            kwargs['number_cards'] = PlayerCard.objects.filter(profilePlayer=profile).aggregate(Sum("numbercards"))
+            kwargs['number_cards'] = PlayerCard.objects.filter(profile=profile).count()
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -82,7 +81,7 @@ class DeckDetailView(DetailView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        kwargs['cards'] = DeckCard.objects.filter(deck=kwargs['object'])
+        kwargs['deck_cards'] = DeckCard.objects.filter(deck=kwargs['object'])
 
         return super().get_context_data(**kwargs)
 
@@ -100,9 +99,9 @@ class DeckCreateView(CreateView):
     def get_context_data(self, **kwargs):
         profile = Profile.objects.filter(user=self.request.user).first()
 
-        card_list = PlayerCard.objects.filter(profilePlayer=profile)
+        player_card_list = PlayerCard.objects.filter(profile=profile)
 
-        kwargs.update({'card_list': card_list, 'deck_cards': None})
+        kwargs.update({'player_card_list': player_card_list, 'deck_cards': None})
 
         return super().get_context_data(**kwargs)
 
@@ -113,21 +112,15 @@ class DeckCreateView(CreateView):
         deck.profile = Profile.objects.filter(user=self.request.user).first()
         deck.save()
 
-        cards = dict(zip(request.POST.getlist('card_id'), request.POST.getlist('card_count')))
-        for card_id, card_nb in cards.items():
-            card_nb = int(card_nb)
+        player_cards_ids = request.POST.getlist('cards')
 
-            if card_nb == 0:
-                continue
+        for player_card_id in player_cards_ids:
+            player_card = PlayerCard.objects.filter(id=player_card_id, profile=profile).first()
 
-            player_card = PlayerCard.objects.filter(cardPlayer=card_id, profilePlayer=profile).first()
-            card = player_card.cardPlayer
-
-            deck_card = DeckCard.objects.filter(cardPlayer=card, deck=deck).first()
+            deck_card = DeckCard.objects.filter(player_card=player_card, deck=deck).first()
             if not deck_card:
-                deck_card = DeckCard(cardPlayer=card, deck=deck, numbercards=0)
+                deck_card = DeckCard(player_card=player_card, deck=deck)
 
-            deck_card.numbercards = card_nb
             deck_card.save()
 
     def post(self, request, *args, **kwargs):
@@ -155,10 +148,10 @@ class DeckUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         profile = Profile.objects.filter(user=self.request.user).first()
 
-        card_list = PlayerCard.objects.filter(profilePlayer=profile)
+        player_card_list = PlayerCard.objects.filter(profile=profile)
         deck_cards = DeckCard.objects.filter(deck=self.object)
 
-        kwargs.update({'card_list': card_list, 'deck_cards': deck_cards})
+        kwargs.update({'player_card_list': player_card_list, 'deck_cards': deck_cards})
 
         return super().get_context_data(**kwargs)
 
@@ -167,24 +160,23 @@ class DeckUpdateView(UpdateView):
 
         self.object = form.save()
 
-        cards = dict(zip(request.POST.getlist('card_id'), request.POST.getlist('card_count')))
-        for card_id, card_nb in cards.items():
-            player_card = PlayerCard.objects.filter(cardPlayer=card_id, profilePlayer=profile).first()
-            card = player_card.cardPlayer
+        player_cards_ids = request.POST.getlist('cards')
 
-            deck_card = DeckCard.objects.filter(cardPlayer=card, deck=self.object).first()
+        for player_card_id in player_cards_ids:
+            player_card = PlayerCard.objects.filter(id=player_card_id, profile=profile).first()
 
-            card_nb = int(card_nb)
-            if card_nb == 0:
-                if deck_card:
-                    deck_card.delete()
-                continue
+            deck_card = DeckCard.objects.filter(player_card=player_card, deck=self.object).first()
 
             if not deck_card:
-                deck_card = DeckCard(cardPlayer=card, deck=self.object, numbercards=0)
+                deck_card = DeckCard(player_card=player_card, deck=self.object)
 
-            deck_card.numbercards = card_nb
             deck_card.save()
+
+        deck_cards = DeckCard.objects.filter(deck=self.object)
+        for deck_card in deck_cards:
+            player_card_id = deck_card.player_card.id
+            if str(player_card_id) not in player_cards_ids:
+                deck_card.delete()
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -217,7 +209,8 @@ class ShopView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             profile = Profile.objects.filter(user=self.request.user).first()
-            kwargs['number_cards'] = PlayerCard.objects.filter(profilePlayer=profile).aggregate(Sum("numbercards"))
+            # TODO fix the following line
+            # kwargs['number_cards'] = PlayerCard.objects.filter(profile=profile).aggregate(Sum("numbercards"))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -227,5 +220,6 @@ class Pay2WinView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             profile = Profile.objects.filter(user=self.request.user).first()
-            kwargs['number_cards'] = PlayerCard.objects.filter(profilePlayer=profile).aggregate(Sum("numbercards"))
+            # TODO fix the following line
+            # kwargs['number_cards'] = PlayerCard.objects.filter(profile=profile).aggregate(Sum("numbercards"))
         return super().dispatch(request, *args, **kwargs)

@@ -28,15 +28,13 @@ class Deck(models.Model):
 
 
 class PlayerCard(models.Model):
-    profilePlayer = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    cardPlayer = models.ForeignKey(Card, on_delete=models.CASCADE)
-    numbercards = models.IntegerField(default=0)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    card = models.ForeignKey(Card, on_delete=models.CASCADE)
 
 
 class DeckCard(models.Model):
     deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
-    cardPlayer = models.ForeignKey(Card, on_delete=models.CASCADE)
-    numbercards = models.IntegerField(default=0)
+    player_card = models.ForeignKey(PlayerCard, on_delete=models.CASCADE)
 
 
 @receiver(post_save, sender=User)
@@ -45,10 +43,10 @@ def create_user_profile(sender, instance, created, **kwargs):
         profile = Profile.objects.create(user=instance)
         cards = Card.objects.all().order_by('?')[:30]
         for card in cards:
-            player_cards = PlayerCard.objects.filter(profilePlayer=profile, cardPlayer=card).first()
+            player_cards = PlayerCard.objects.filter(profile=profile, card=card).first()
             if not player_cards:
-                player_cards = PlayerCard(profilePlayer=profile, cardPlayer=card, numbercards=0)
-            player_cards.numbercards += 1
+                player_cards = PlayerCard(profile=profile, card=card)
+
             player_cards.save()
 
 
