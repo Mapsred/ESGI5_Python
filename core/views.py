@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -194,13 +195,19 @@ class DeckUpdateView(UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class DeckDelete(DeleteView):
+class DeckDeleteView(DeleteView):
     model = Deck
     success_url = reverse_lazy('deck_list')
+    template_name = "core/deck_confirm_delete.html"
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
+    def get_object(self, queryset=None):
+        """ Hook to ensure object is owned by request.user. """
+        profile = Profile.objects.filter(user=self.request.user).first()
+        obj = super().get_object()
+        if not obj.profile == profile:
+            raise Http404
+
+        return obj
 
 
 class ShopView(TemplateView):

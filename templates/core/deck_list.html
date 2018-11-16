@@ -20,7 +20,7 @@
                         <td>
                             <a class="btn btn-primary" href="{% url "deck_detail" deck.id %}">View</a>
                             <a class="btn btn-warning" href="{% url "deck_edit" deck.id %}">Edit</a>
-                            <a class="btn btn-danger" href="#">Delete</a>
+                            <a class="btn btn-danger" href="{% url "deck_delete" deck.id %}">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}
