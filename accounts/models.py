@@ -18,7 +18,7 @@ class Profile(models.Model):
 
 
 class ProfileAction(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     action = models.CharField(max_length=256, default=None, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     data = ArrayField(models.CharField(max_length=256), blank=True, null=True)

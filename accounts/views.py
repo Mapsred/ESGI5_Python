@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
-from django.views.generic import TemplateView, CreateView, DetailView
+from django.views.generic import TemplateView, CreateView, DetailView, DeleteView
 
 from accounts.forms import ProfileSubscribeForm
 from accounts.models import Profile, ProfileSubscriptions, ProfileAction
@@ -85,3 +86,20 @@ class ProfileSubscriptionDetailView(TemplateView):
         kwargs['profile_actions'] = ProfileAction.objects.filter(profile=subscription_profile.subscription)
 
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProfileSubscriptionDeleteView(DeleteView):
+    model = ProfileSubscriptions
+    success_url = reverse_lazy('dashboard')
+    template_name = "account/profile_subscription/confirm_delete.html"
+
+    def get_object(self, queryset=None):
+        """ Hook to ensure object is owned by request.user. """
+        profile = Profile.objects.filter(user=self.request.user).first()
+        log_profile_activity(profile, constant.PROFILE_UNSUBSCRIBE)
+
+        obj = super().get_object()
+        if not obj.profile == profile:
+            raise Http404
+
+        return obj

@@ -7,4 +7,5 @@ urlpatterns = [
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('dashboard/subscription/add', views.ProfileSubscriptionCreateView.as_view(), name='subscription_add'),
     path('dashboard/subscription/<int:pk>', views.ProfileSubscriptionDetailView.as_view(), name='subscription_detail'),
+    path('dashboard/subscription/<int:pk>/delete', views.ProfileSubscriptionDeleteView.as_view(), name='subscription_delete'),
 ]
