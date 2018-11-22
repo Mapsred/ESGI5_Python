@@ -1,0 +1,5 @@
+DECK_CREATE = "deck.create"
+DECK_UPDATE = "deck.update"
+DECK_DELETE = "deck.delete"
+CARDS_BUY = "cards.buy"
+CARDS_SELL = "cards.sell"

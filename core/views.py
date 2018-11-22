@@ -6,12 +6,15 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from accounts.models import Profile, Deck, PlayerCard, DeckCard
+from core import constant
 from core.forms import DeckForm
 from core.models import Card
 
 import logging
 
 # Get an instance of a logger
+from core.services import log_profile_activity
+
 logger = logging.getLogger(__name__)
 
 
@@ -128,6 +131,8 @@ class DeckCreateView(CreateView):
         form = self.get_form()
         if form.is_valid():
             self._create_deck(form, request)
+            profile = Profile.objects.filter(user=self.request.user).first()
+            log_profile_activity(profile, constant.DECK_CREATE)
 
             return self.form_valid(form)
         else:
@@ -185,6 +190,8 @@ class DeckUpdateView(UpdateView):
         form = self.get_form()
         if form.is_valid():
             self._update_deck(form, request)
+            profile = Profile.objects.filter(user=self.request.user).first()
+            log_profile_activity(profile, constant.DECK_UPDATE)
 
             return self.form_valid(form)
         else:
@@ -203,6 +210,7 @@ class DeckDeleteView(DeleteView):
     def get_object(self, queryset=None):
         """ Hook to ensure object is owned by request.user. """
         profile = Profile.objects.filter(user=self.request.user).first()
+        log_profile_activity(profile, constant.DECK_DELETE)
         obj = super().get_object()
         if not obj.profile == profile:
             raise Http404

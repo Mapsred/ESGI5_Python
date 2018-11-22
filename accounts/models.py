@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.urls import reverse
 
@@ -14,6 +15,13 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class ProfileAction(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    action = models.CharField(max_length=256, default=None, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    data = ArrayField(models.CharField(max_length=256), blank=True, null=True)
 
 
 class Deck(models.Model):
