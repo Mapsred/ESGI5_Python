@@ -4,7 +4,23 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+    {# TODO Add a if condition for empty form.subscription to redirect with a flashbag   #}
     <div class="container">
-        <h1>Dashboard</h1>
+        <h1>Add Subscription</h1>
+        <form class="form-signin" method="post">
+            {% if form.errors %}
+                <h2>Errors : </h2>
+                {{ form.errors }}
+            {% endif %}
+
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Profiles</label>
+                {{ form.subscription }}
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Send</button>
+
+        </form>
     </div>
 {% endblock %}

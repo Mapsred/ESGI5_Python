@@ -42,7 +42,16 @@ class ProfileSubscriptionCreateView(CreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["choices"] = Profile.objects.all()
+        profile = Profile.objects.filter(user=self.request.user).first()
+        subcribed_user_list = ProfileSubscriptions.objects.filter(profile=profile)
+
+        exclusions = set()
+        exclusions.add(profile.id)
+
+        for subscribed in subcribed_user_list:
+            exclusions.add(subscribed.subscription_id)
+
+        kwargs["exclusions"] = list(exclusions)
 
         return kwargs
 
@@ -50,6 +59,11 @@ class ProfileSubscriptionCreateView(CreateView):
         form = self.get_form()
         if form.is_valid():
             profile = Profile.objects.filter(user=self.request.user).first()
+
+            subcription = form.save(commit=False)
+            subcription.profile = profile
+            subcription.save()
+
             log_profile_activity(profile, constant.PROFILE_SUBSCRIBE)
 
             return self.form_valid(form)

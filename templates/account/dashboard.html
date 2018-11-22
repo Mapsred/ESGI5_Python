@@ -10,7 +10,10 @@
             <li class="list-group-item active">Your subscriptions</li>
             {% if subscriptions %}
                 {% for profile in subscriptions %}
-                    <li class="list-group-item">{{ profile }}</li>
+                    <li class="list-group-item">
+                        {{ profile.subscription }}
+                    <a class="btn btn-danger pull-right" href="">Delete</a>
+                    </li>
                 {% endfor %}
             {% else %}
                 <li class="list-group-item">No subscriptions yet</li>
@@ -21,7 +24,7 @@
             <li class="list-group-item active">Your followers</li>
             {% if followers %}
                 {% for profile in followers %}
-                    <li class="list-group-item">{{ profile }}</li>
+                    <li class="list-group-item">{{ profile.profile }}</li>
                 {% endfor %}
             {% else %}
                 <li class="list-group-item">No followers yet</li>

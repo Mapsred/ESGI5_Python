@@ -10,7 +10,6 @@
             {% if form.errors %}
                 <h2>Errors : </h2>
                 {{ form.errors }}
-                {{ form.fields.cards.all }}
             {% endif %}
 
             {% csrf_token %}
