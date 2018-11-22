@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css"/>
     {% load static %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
@@ -29,25 +29,27 @@
     </button>
 
     <div class="navbar-collapse offcanvas-collapse">
-        <ul class="navbar-nav mr-auto">
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'card_list' %}">Card List</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'deck_list' %}">My Decks</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'shop' %}">Shop</a>
-                </li>
-            {% endif %}
-        </ul>
+        {% block navbar_main %}
+            <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'card_list' %}">Card List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deck_list' %}">My Decks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop' %}">Shop</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endblock %}
     </div>
     <ul class="navbar-nav px-3">
         {% if user.is_authenticated %}
             <li>
                 <!-- Will return a modification profil page -->
-                <a class="nav-link" href="#">{{ user.username }}</a>
+                <a class="nav-link" href="{% url 'dashboard' %}">{{ user.username }}</a>
             </li>
             <li class="nav-item">
                 <!-- Will return a page where you can buy credit vs real money -->

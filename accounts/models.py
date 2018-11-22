@@ -24,6 +24,12 @@ class ProfileAction(models.Model):
     data = ArrayField(models.CharField(max_length=256), blank=True, null=True)
 
 
+class ProfileSubscriptions(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile')
+    subscription = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='subscription')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class Deck(models.Model):
     name = models.CharField(max_length=256, default=None, blank=True, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
