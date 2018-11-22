@@ -29,6 +29,9 @@ class ProfileSubscriptions(models.Model):
     subscription = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='subscription')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def get_absolute_url(self):
+        return reverse('subscription_detail', args=[str(self.id)])
+
 
 class Deck(models.Model):
     name = models.CharField(max_length=256, default=None, blank=True, null=True)

@@ -12,7 +12,10 @@
                 {% for profile in subscriptions %}
                     <li class="list-group-item">
                         {{ profile.subscription }}
-                    <a class="btn btn-danger pull-right" href="">Delete</a>
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-info" href="{{ profile.get_absolute_url }}">Informations</a>
+                            <a class="btn btn-danger" href="">Delete</a>
+                        </div>
                     </li>
                 {% endfor %}
             {% else %}

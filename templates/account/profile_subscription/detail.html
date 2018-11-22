@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %} Detail {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Details for user {{ subscription_profile.subscription }}</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Detail</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for profile_action in profile_actions %}
+                <tr>
+                <td>{{ profile_action.action }}</td>
+                <td>{{ profile_action.data }}</td>
+                <td>{{ profile_action.created_at }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
