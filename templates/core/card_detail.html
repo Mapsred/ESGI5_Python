@@ -5,9 +5,8 @@
 {% block content %}
     <div class="container">
         <div class="col-md-6">
-            <a href="{% url "card_list" %}" class="d-inline-block mb-2 text-primary bold">
-                <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                Back to the list
+            <a class="btn btn-flat btn-info btn-sm margin-bottom10" href="{% url 'card_list' %}">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to the list
             </a>
 
             {% include "core/part/card.html" with card=card %}
