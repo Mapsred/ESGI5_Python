@@ -84,6 +84,7 @@ class ProfileSubscriptionDetailView(TemplateView):
         subscription_profile = get_object_or_404(ProfileSubscriptions, id=identifier, profile=profile)
         kwargs['subscription_profile'] = subscription_profile
         kwargs['profile_actions'] = ProfileAction.objects.filter(profile=subscription_profile.subscription)
+        kwargs['profile'] = profile
 
         return super().dispatch(request, *args, **kwargs)
 

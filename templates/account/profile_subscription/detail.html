@@ -5,9 +5,15 @@
     <div class="container">
         <div class="card">
             <div class="card-body">
-                <a class="btn btn-flat btn-info btn-sm pull-left margin-right20 margin-top5" href="{% url 'dashboard' %}">
+                <a class="btn btn-flat btn-info btn-sm pull-left margin-right20 margin-top5"
+                   href="{% url 'dashboard' %}">
                     <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard
                 </a>
+                <div class="margin-bottom10">
+                    <a href="{% url 'profile_user_card_list' profile.id %}" class="btn btn-flat btn-success">
+                        {{ profile }} cards
+                    </a>
+                </div>
 
                 <h2 class="card-title">Details for user {{ subscription_profile.subscription }}</h2>
                 <table class="table">
