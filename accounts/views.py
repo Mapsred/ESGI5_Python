@@ -119,3 +119,22 @@ class ProfileCardListView(ListView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProfileUserCardListView(ListView):
+    model = PlayerCard
+    context_object_name = 'player_card_list'
+    template_name = 'account/player_card_list.html'
+    paginate_by = 25
+    pk = -1
+
+    def get_queryset(self, *args, **kwargs):
+        profile = Profile.objects.filter(id=self.pk).first()
+
+        return PlayerCard.objects.filter(profile=profile)
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.pk = kwargs['pk']
+
+        return super().dispatch(request, *args, **kwargs)

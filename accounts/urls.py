@@ -9,4 +9,5 @@ urlpatterns = [
     path('dashboard/subscription/<int:pk>', views.ProfileSubscriptionDetailView.as_view(), name='subscription_detail'),
     path('dashboard/subscription/<int:pk>/delete', views.ProfileSubscriptionDeleteView.as_view(), name='subscription_delete'),
     path('cards/list', views.ProfileCardListView.as_view(), name='profile_card_list'),
+    path('cards/list/<int:pk>', views.ProfileUserCardListView.as_view(), name='profile_user_card_list'),
 ]
