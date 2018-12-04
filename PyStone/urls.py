@@ -21,4 +21,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('', include('core.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('/chat', include('chat.routing'))
 ]

@@ -28,6 +28,11 @@ services:
         - https_proxy
         - no_proxy
 
+    redis:
+      image: redis:latest
+      container_name: esgi-pystone-redis
+      ports:
+            - '8358:6379'
     adminer:
       container_name: esgi-pystone-adminer
       image: adminer

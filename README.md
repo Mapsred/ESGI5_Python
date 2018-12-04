@@ -26,5 +26,5 @@ https://docs.djangoproject.com/en/2.1/intro/tutorial01/
 https://docs.djangoproject.com/en/2.1/intro/tutorial02/
 https://docs.djangoproject.com/en/2.1/intro/tutorial03/
 https://docs.djangoproject.com/en/2.1/intro/tutorial04/
-
+https://github.com/tayloraburgess/django-chat
 ...

@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'core',
+    'chat',
+    'combat',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +74,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'PyStone.wsgi.application'
+ASGI_APPLICATION = "chat.routing.application"
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -124,6 +128,17 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+        'ROUTING': 'chat.routing.channel_routing',
+    }
+}
 
 LOGGING = {
     'version': 1,
