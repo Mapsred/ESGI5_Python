@@ -6,6 +6,11 @@
 {% block content %}
     <div class="container">
         <h1>Dashboard</h1>
+        <div class="margin-bottom10">
+            <a href="{% url 'profile_card_list' %}" class="btn btn-flat btn-success">My cards</a>
+            <a href="{% url 'deck_list' %}" class="btn btn-flat btn-info">My decks</a>
+        </div>
+
         <ul class="list-group">
             <li class="list-group-item active">Your subscriptions</li>
             {% if subscriptions %}

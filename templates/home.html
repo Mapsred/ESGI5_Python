@@ -10,6 +10,7 @@
 
             <p>All the cards are in display in the <a href="{% url 'card_list' %}">card list</a>.</p>
             <p>You can also see you existing <a href="{% url 'deck_list' %}">decks</a>.</p>
+            <p>If you wish, you can also see your <a href="{% url 'profile_card_list' %}">collection</a>.</p>
             <p>You have {{ profile.credits }} credits.</p>
             <p>You have {{ number_cards }} cards.</p>
             <p>Each deck of 8 cards costs <b>100</b> credits.</p>

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Card List{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Card List</h1>
+        {% if player_card_list %}
+            <ul>
+                {% for player_card in player_card_list %}
+                    <li>
+                        <a href="{{ player_card.card.get_absolute_url }}" data-toggle="popover-img"
+                           data-img="{{ player_card.card.img }}">{{ player_card.card }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You do not have any cards yet</p>
+        {% endif %}
+    </div>
+{% endblock %}

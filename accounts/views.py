@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
-from django.views.generic import TemplateView, CreateView, DetailView, DeleteView
+from django.views.generic import TemplateView, CreateView, DeleteView, ListView
 
 from accounts.forms import ProfileSubscribeForm
-from accounts.models import Profile, ProfileSubscriptions, ProfileAction
+from accounts.models import Profile, ProfileSubscriptions, ProfileAction, PlayerCard
 from core import constant
 from core.services import log_profile_activity
 
@@ -103,3 +103,19 @@ class ProfileSubscriptionDeleteView(DeleteView):
             raise Http404
 
         return obj
+
+
+class ProfileCardListView(ListView):
+    model = PlayerCard
+    context_object_name = 'player_card_list'
+    template_name = 'account/player_card_list.html'
+    paginate_by = 25
+
+    def get_queryset(self):
+        profile = Profile.objects.filter(user=self.request.user).first()
+
+        return PlayerCard.objects.filter(profile=profile)
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
