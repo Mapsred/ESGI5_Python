@@ -54,6 +54,13 @@ class DeckCard(models.Model):
     player_card = models.ForeignKey(PlayerCard, on_delete=models.CASCADE)
 
 
+class Message(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='message_profile')
+    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='message_receiver')
+    created_at = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

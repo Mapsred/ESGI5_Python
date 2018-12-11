@@ -8,9 +8,11 @@ from django.views import generic
 from django.views.generic import TemplateView, CreateView, DeleteView, ListView
 
 from accounts.forms import ProfileSubscribeForm
-from accounts.models import Profile, ProfileSubscriptions, ProfileAction, PlayerCard
+from accounts.models import Profile, ProfileSubscriptions, ProfileAction, PlayerCard, Message
 from core import constant
 from core.services import log_profile_activity
+
+from django.db.models import Q
 
 
 class SignUp(generic.CreateView):
@@ -137,5 +139,31 @@ class ProfileUserCardListView(ListView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.pk = kwargs['pk']
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class MessageView(TemplateView):
+    template_name = "account/messages.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        profile = Profile.objects.filter(user=self.request.user).first()
+        followers = ProfileSubscriptions.objects.filter(subscription=profile)
+        subscriptions = ProfileSubscriptions.objects.filter(profile=profile)
+        profiles = []
+        for follower in followers:
+            profiles.append(follower.profile)
+        for subscription in subscriptions:
+            profiles.append(subscription.subscription)
+
+        contact = Profile.objects.filter(user=kwargs['pk']).first()
+
+        kwargs['contact'] = contact
+        kwargs['profiles'] = profiles
+        kwargs['conversations'] = Message.objects.filter(
+            Q(profile=profile) & Q(receiver=contact) |
+            Q(receiver=profile) & Q(profile=contact)
+        )
 
         return super().dispatch(request, *args, **kwargs)

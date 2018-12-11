@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load core_tags %}
+
+{% block title %} Messages {% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'messages.css' %}">
+{% endblock stylesheet %}
+
+{% block content %}
+    <div class="container">
+        <h3 class=" text-center">Messaging with {{ contact|capfirst }}</h3>
+        <div class="messaging">
+            <div class="inbox_msg">
+                <div class="inbox_people">
+                    <div class="headind_srch">
+                        <div class="recent_heading">
+                            <h4>Contacts</h4>
+                        </div>
+                    </div>
+                    <div class="inbox_chat">
+                        <div class="contact_list">
+                            <div class="contact_people">
+                                {% for profile in profiles %}
+                                    <div class="chat_ib">
+                                        <h5>{{ profile|capfirst }}</h5>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bottom-bar bg-dark">
+                        <a href="{% url 'dashboard' %}" class="add-contact btn btn-secondary btn-flat col-md-6">
+                            <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i>
+                            <span>Add contact</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="mesgs">
+                    <div class="msg_history">
+                        {% for conversation in conversations %}
+                            {% if conversation.profile == profile %}
+                                <div class="outgoing_msg">
+                                    <div class="sent_msg">
+                                        <p>{{ conversation.content }}</p>
+                                        <span class="time_date">
+                                        {{ conversation.created_at|date:"P" }} &nbsp; |
+                                        &nbsp; {{ conversation.created_at|date:"M d Y" }}
+                                    </span>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="incoming_msg">
+                                    <div class="received_msg">
+                                        <div class="received_withd_msg">
+                                            <p>{{ conversation.content }}</p>
+                                            <span class="time_date">
+                                                {{ conversation.created_at|date:"P" }} &nbsp; |
+                                                &nbsp; {{ conversation.created_at|date:"M d Y" }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="type_msg">
+                        <div class="input_msg_write">
+                            <input type="text" class="write_msg" placeholder="Type a message"/>
+                            <button class="msg_send_btn" type="button">
+                                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
