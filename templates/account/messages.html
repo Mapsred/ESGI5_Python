@@ -30,7 +30,14 @@
                             <div class="contact_people">
                                 {% for profile in profiles %}
                                     <div class="chat_ib">
-                                        <h5>{{ profile|capfirst }}</h5>
+                                        {% if profile.id != contact.id %}
+                                            <a href="{% url 'profile_messages' profile.id %}" class="h5">
+                                                {{ profile|capfirst }}
+                                            </a>
+                                        {% else %}
+                                            <h5>{{ profile|capfirst }}</h5>
+                                        {% endif %}
+
                                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                                     </div>
                                 {% endfor %}
