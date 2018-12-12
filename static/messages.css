@@ -181,7 +181,7 @@ img {
     border: medium none;
     color: #4c4c4c;
     font-size: 15px;
-    min-height: 48px;
+    min-height: 54px;
     width: 100%;
 }
 
@@ -215,4 +215,8 @@ img {
 
 .bottom-bar {
     width: 100%;
+}
+
+.hidden.model-msg {
+    height: 0;
 }

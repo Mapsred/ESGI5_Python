@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.generic import TemplateView, CreateView, DeleteView, ListView
 
+from accounts import services
 from accounts.forms import ProfileSubscribeForm
 from accounts.models import Profile, ProfileSubscriptions, ProfileAction, PlayerCard, Message
 from core import constant
@@ -161,9 +162,30 @@ class MessageView(TemplateView):
 
         kwargs['contact'] = contact
         kwargs['profiles'] = profiles
-        kwargs['conversations'] = Message.objects.filter(
-            Q(profile=profile) & Q(receiver=contact) |
-            Q(receiver=profile) & Q(profile=contact)
-        )
+        kwargs['conversations'] = services.fetch_conversations(profile, contact)
 
         return super().dispatch(request, *args, **kwargs)
+
+
+def post_chat_message(request):
+    if request.method != 'POST':
+        raise Http404()
+
+    profile = Profile.objects.filter(user=request.user).first()
+    contact = Profile.objects.filter(id=request.POST['contact']).first()
+
+    Message.objects.create(profile=profile, receiver=contact, content=request.POST['message'])
+
+    return JsonResponse({})
+
+
+def get_chat_messages(request):
+    if request.method != 'GET':
+        raise Http404()
+
+    profile = Profile.objects.filter(user=request.user).first()
+    contact = request.GET['contact']
+
+    return JsonResponse({
+        'conversations': services.fetch_conversations(profile, contact)
+    })
