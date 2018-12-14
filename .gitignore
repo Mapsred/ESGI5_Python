@@ -106,4 +106,4 @@ venv.bak/
 
 # Axel
 .idea/*
-/engine/database/*
+/engine/db/data/*
