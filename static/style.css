@@ -33,3 +33,9 @@ body {
 .table-background {
     background: hsl(0, 0%, 97%);
 }
+
+.subscription {
+    padding: .375rem .75rem;
+    margin-bottom: 0;
+    display: inline-block;
+}

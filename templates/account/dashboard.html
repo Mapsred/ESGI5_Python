@@ -16,10 +16,11 @@
             {% if subscriptions %}
                 {% for profile in subscriptions %}
                     <li class="list-group-item">
-                        {{ profile.subscription }}
+                        <p class="subscription">{{ profile.subscription }}</p>
                         <div class="btn-group pull-right">
+                            <a class="btn btn-secondary" href="{% url "combat" profile.id %}">Fight</a>
                             <a class="btn btn-info" href="{{ profile.get_absolute_url }}">Informations</a>
-                            <a class="btn btn-danger" href="{% url "subscription_delete" profile.id %}">Delete</a>
+                            <a class="btn btn-danger" href="{% url "subscription_delete" profile.id %}">Remove</a>
                         </div>
                     </li>
                 {% endfor %}
