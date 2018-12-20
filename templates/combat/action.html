@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load core_tags %}
+
+
+{% block title %}Combat against {{ target }}{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'combats.css' %}">
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{% static 'js/combats.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <h1>Combat Zone</h1>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">My cards</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="profile_player_card">Choose a card to fight</label>
+                            <select name="profile_player_card" id="profile_player_card" class="form-control">
+                                {% for profile_deck_card in profile_deck_cards %}
+                                    {% assign player_card profile_deck_card.player_card %}
+                                    <option value="{{ player_card.id }}" class="option-{{ player_card.id }}">
+                                        {{ player_card.card }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary form-control" id="action_submit">
+                                Submit
+                            </button>
+                        </div>
+
+                        {% for profile_deck_card in profile_deck_cards %}
+                            {% assign player_card profile_deck_card.player_card %}
+                            {% assign card player_card.card %}
+                            <div id="profile_{{ player_card.id }}">
+                                <img src="{{ card.img }}" class="img-fluid" alt="{{ card }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Fighting Zone
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-success"><span class="win">0</span> wins</small>
+                            <small class="label pull-right bg-danger"><span class="loose">0</span> looses</small>
+                        </span>
+                    </div>
+                    <div class="card-body" id="fighting_zone"></div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">{{ target|capfirst }} cards</div>
+                    <div class="card-body">
+                        {% for target_deck_card in target_deck_cards %}
+                            {% assign player_card target_deck_card.player_card %}
+                            {% assign card player_card.card %}
+                            <div id="target_{{ player_card.id }}">
+                                <img src="{{ card.img }}" class="img-fluid" alt="{{ card }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -10,10 +10,7 @@
                 <div>
                     <input type="radio" id="{{ deck.id }}" name="{{ input_name }}" value="{{ deck.id }}">
                     <label for="{{ deck.id }}">{{ deck }}</label>
-                    <a target="_blank" href="{% url 'deck_detail' deck.id %}"
-                       class="btn btn-flat btn-info">
-                        Detail
-                    </a>
+                    <a target="_blank" href="{% url 'deck_detail' deck.id %}" class="btn btn-flat btn-info">Detail</a>
                 </div>
             {% endfor %}
 

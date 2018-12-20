@@ -1,0 +1,50 @@
+#fighting_zone .action {
+    display: block;
+    width: 100%;
+    float: left;
+}
+
+#fighting_zone .action img {
+    padding-top: 20px;
+}
+
+#fighting_zone .action div {
+    max-width: 45%;
+    float: right;
+}
+
+#fighting_zone .action div:first-of-type {
+    float: left;
+}
+
+.winner {
+    background: #ffffff url("images/winner.png") no-repeat top;
+}
+
+.looser {
+    background: #ffffff url("images/looser.png") no-repeat top;
+}
+
+
+.pull-right-container {
+    position: absolute;
+    right: 10px;
+    margin-top: 3px;
+}
+
+.pull-right-container .label, .pull-right-container .badge {
+    margin-right: 5px;
+}
+
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
