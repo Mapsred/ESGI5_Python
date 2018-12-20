@@ -12,6 +12,7 @@ from django.views.generic import TemplateView
 
 from accounts.models import Profile, Deck, ProfileSubscriptions, DeckCard, PlayerCard
 from combat.services import get_auto_or_manual_decks, cards_query_set_to_session
+from core.services import log_profile_activity
 
 
 class CombatView(TemplateView):
@@ -75,6 +76,12 @@ class CombatActionView(TemplateView):
 def combat_action(request):
     if request.method != 'POST':
         raise Http404()
+
+    if 'winner' in request.POST:
+        profile = Profile.objects.filter(user=request.user).first()
+        log_profile_activity(profile, 'combat.%s' % request.POST['winner'])
+
+        return JsonResponse({})
 
     profile_deck_cards = request.session.get('profile_deck_cards')
     target_deck_cards = request.session.get('target_deck_cards')
