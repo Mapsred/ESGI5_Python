@@ -95,8 +95,11 @@ def combat_action(request):
         looser = "target_%s" % (selected_target_card['player_card'])
         player_state = 'winner'
 
+        request.session['profile_deck_cards'] = profile_deck_cards
+        request.session['target_deck_cards'] = target_deck_cards
+
     return JsonResponse({
-        'profile_player_card': profile_deck_cards,
+        'selected_player_card': selected_player_card,
         'selected_target_card': selected_target_card,
         'winner': winner,
         'looser': looser,

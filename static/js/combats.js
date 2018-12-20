@@ -15,13 +15,13 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                var selected_card_img = $("div#profile_" + card);
+                var selected_card_img = $("div#profile_" + data['selected_player_card']);
                 $("#fighting_zone").prepend('<div class="action"></div>');
                 selected_card_img.prependTo("#fighting_zone .action:first");
 
-                var selected_target_card = data['selected_target_card'];
-                selected_card_img = $("div#target_" + selected_target_card['player_card']);
-                selected_card_img.appendTo("#fighting_zone .action:first");
+                var selected_target_img = data['selected_target_card'];
+                selected_target_img = $("div#target_" + selected_target_img['player_card']);
+                selected_target_img.appendTo("#fighting_zone .action:first");
 
                 $("#" + data['looser']).addClass('looser');
                 $("#" + data['winner']).addClass('winner');
