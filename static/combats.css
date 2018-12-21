@@ -1,3 +1,8 @@
+#fighting_zone, .card-list {
+    max-height: 440px;
+    overflow: auto;
+}
+
 #fighting_zone .action {
     display: block;
     width: 100%;
