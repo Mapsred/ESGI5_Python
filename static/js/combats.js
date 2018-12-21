@@ -1,5 +1,26 @@
 $(document).ready(function () {
     $("#action_submit").click(function () {
+        playAction();
+    });
+
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('auto')) {
+        $(".card-list .form-group").hide();
+
+        loopTimeout($("#profile_player_card option").length);
+
+        function loopTimeout(i) {
+            setTimeout(function () {
+                playAction();
+
+                if (--i) {
+                    loopTimeout(i);
+                }
+            }, 2500);
+        }
+    }
+
+    function playAction() {
         var card = $("#profile_player_card").val();
         if (!card) {
             return false;
@@ -37,8 +58,7 @@ $(document).ready(function () {
                 checkEnd();
             }
         });
-
-    });
+    }
 
     function increment(selector, number) {
         number = number || 1;

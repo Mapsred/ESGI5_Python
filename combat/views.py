@@ -40,12 +40,14 @@ class CombatView(TemplateView):
 
         profile_deck = get_auto_or_manual_decks(parameters, profile, 'profile_deck')
         target_deck = get_auto_or_manual_decks(parameters, target, 'target_deck')
+        print(parameters)
 
         url = resolve_url('combat_action')
 
         full_url = "%s?%s" % (url, urlencode({
             "profile_deck": profile_deck,
-            "target_deck": target_deck
+            "target_deck": target_deck,
+            'auto': parameters['auto']
         }))
 
         return HttpResponseRedirect(full_url)
