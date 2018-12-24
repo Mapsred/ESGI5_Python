@@ -11,8 +11,12 @@
         <div class="row">
             <div class="col-md-12">
                 <b>Deck {{ deck.name }}</b>
-                <a href="{% url "deck_edit" deck.id %}" class="btn btn-flat btn-warning margin-bottom10">Éditer le deck</a>
-                <a href="#" class="btn btn-flat btn-danger margin-bottom10">Supprimer le deck</a>
+                {% if is_current_user %}
+                    <a href="{% url "deck_edit" deck.id %}" class="btn btn-flat btn-warning margin-bottom10">
+                        Éditer le deck
+                    </a>
+                    <a href="#" class="btn btn-flat btn-danger margin-bottom10">Supprimer le deck</a>
+                {% endif %}
             </div>
 
             {% for deck_card in deck_cards.all %}
