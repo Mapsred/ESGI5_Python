@@ -18,6 +18,7 @@
                     <li class="list-group-item">
                         <p class="subscription">{{ profile.subscription }}</p>
                         <div class="btn-group pull-right">
+                            <a class="btn btn-dark" href="{% url "profile_user_card_trade" profile.id %}">Trade</a>
                             <a class="btn btn-secondary" href="{% url "combat" profile.id %}">Fight</a>
                             <a class="btn btn-info" href="{{ profile.get_absolute_url }}">Informations</a>
                             <a class="btn btn-danger" href="{% url "subscription_delete" profile.id %}">Remove</a>

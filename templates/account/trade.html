@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load core_tags %}
+
+{% block title %}Card Trade Center{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Card Trade Center</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Your cards</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="profile_player_card">Choose a card to trade</label>
+                                <select name="profile_player_card" id="profile_player_card"
+                                        class="form-control select2">
+                                    {% for player_card in profile_cards %}
+                                        <option value="{{ player_card.id }}" class="option-{{ player_card.id }}">
+                                            {{ player_card.card }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">{{ contact|capfirst }} cards</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="contact_player_card">Choose a card to trade</label>
+                                <select name="contact_player_card" id="contact_player_card"
+                                        class="form-control select2">
+                                    {% for contact_card in contact_cards %}
+                                        <option value="{{ contact_card.id }}" class="option-{{ contact_card.id }}">
+                                            {{ contact_card.card }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card margin-top25">
+                <div class="card-body text-center">
+                    <button type="submit" class="btn btn-primary">Trade the cards</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+

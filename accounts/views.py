@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import Http404, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -9,7 +10,7 @@ from django.views.generic import TemplateView, CreateView, DeleteView, ListView
 
 from accounts import services
 from accounts.forms import ProfileSubscribeForm
-from accounts.models import Profile, ProfileSubscriptions, ProfileAction, PlayerCard, Message
+from accounts.models import Profile, ProfileSubscriptions, ProfileAction, PlayerCard, Message, DeckCard
 from core import constant
 from core.services import log_profile_activity
 
@@ -189,3 +190,45 @@ def get_chat_messages(request):
     return JsonResponse({
         'conversations': services.fetch_conversations(profile, contact)
     })
+
+
+class TradeCardCenterView(TemplateView):
+    template_name = "account/trade.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        identifier = kwargs['pk']
+        profile = Profile.objects.filter(user=self.request.user).first()
+
+        contact_profile_subscription = ProfileSubscriptions.objects.filter(id=identifier).first()
+        contact = contact_profile_subscription.subscription
+
+        kwargs['profile'] = profile
+        kwargs['contact'] = contact
+        kwargs['profile_cards'] = PlayerCard.objects.filter(profile=profile)
+        kwargs['contact_cards'] = PlayerCard.objects.filter(profile=contact)
+
+        return super().dispatch(request, *args, **kwargs)
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        contact = kwargs['contact']
+        profile_card_id = request.POST['profile_player_card']
+        profile_card = PlayerCard.objects.filter(id=profile_card_id).first()
+        profile_card.profile = contact
+        profile_card.save()
+
+        profile = kwargs['profile']
+        contact_card_id = request.POST['contact_player_card']
+        contact_card = PlayerCard.objects.filter(id=contact_card_id).first()
+        contact_card.profile = profile
+        contact_card.save()
+
+        messages.info(request, 'Successfully traded %s %s to %s %s' % (
+            profile,
+            profile_card.card.name,
+            contact,
+            contact_card.card.name
+        ))
+
+        return redirect('profile_user_card_trade', kwargs['pk'])

@@ -3,14 +3,12 @@ from urllib.parse import urlencode
 
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-from django.forms import model_to_dict
 from django.http import HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import redirect, resolve_url
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
-from accounts.models import Profile, Deck, ProfileSubscriptions, DeckCard, PlayerCard
+from accounts.models import Profile, Deck, ProfileSubscriptions, DeckCard
 from combat.services import get_auto_or_manual_decks, cards_query_set_to_session
 from core.services import log_profile_activity
 
