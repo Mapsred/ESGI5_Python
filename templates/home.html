@@ -11,12 +11,21 @@
                     <h5 class="card-title">Welcome to <b>PyStone</b> !</h5>
                     <p class="card-text">You have {{ profile.credits }} credits.</p>
                     <p class="card-text">You have {{ number_cards }} cards.</p>
-                    <p class="card-text">Each deck of 8 cards costs <b>100</b> credits.</p>
-                    <p class="card-text">You can gain more credits by winning fights <i>(WIP)</i>.</p>
+                    <p class="card-text">Each pack of 8 cards costs <b>100</b> credits.</p>
+                    <p class="card-text">You can gain more credits by winning fights.</p>
 
-                    <a href="{% url 'card_list' %}" class="btn btn-primary">See al the cards</a>
+                    <a href="{% url 'card_list' %}" class="btn btn-primary">See all the cards</a>
                     <a href="{% url 'deck_list' %}" class="btn btn-primary">My Decks</a>
                     <a href="{% url 'profile_card_list' %}" class="btn btn-primary">My Card Collection</a>
+
+                    <p class="margin-top25">
+                        <a href="{% url 'dashboard' %}" class="btn btn-dark">Access to my Dashboard</a>
+                    </p>
+                    <p>
+                        On the dashboard you will be able to access all your follower and your subscriptions.
+                        <br>
+                        You will be able to trade card and fight your subscriptions decks to try to gain credits.
+                    </p>
                 {% else %}
                     <p class="card-text">You are not logged in</p>
                     <a href="{% url 'login' %}">login</a>
