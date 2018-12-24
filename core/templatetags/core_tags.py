@@ -16,7 +16,6 @@ def times_range(number, start=1):
 
 @register.filter(name="nl2br")
 def nl2br(value):
-    print(value)
     return value.replace("\\n", "<br>")
 
 
