@@ -4,7 +4,7 @@ $(document).ready(function () {
     });
 
     var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('auto')) {
+    if (urlParams.get('auto') === 'true') {
         $(".card-list .form-group").hide();
 
         loopTimeout($("#profile_player_card option").length);
