@@ -79,6 +79,10 @@ def combat_action(request):
     if 'winner' in request.POST:
         profile = Profile.objects.filter(user=request.user).first()
         log_profile_activity(profile, 'combat.%s' % request.POST['winner'])
+        if request.POST['winner'] == 'player':
+            log_profile_activity(profile, 'credit.gain.10')
+            profile.credits += 10
+            profile.save()
 
         return JsonResponse({})
 
@@ -102,7 +106,7 @@ def combat_action(request):
         looser = "target_%s" % (selected_target_card['player_card'])
         player_state = 'winner'
 
-    print("%s vs %s" %(selected_player_card['card_name'], selected_target_card['card_name']))
+    print("%s vs %s" % (selected_player_card['card_name'], selected_target_card['card_name']))
     return JsonResponse({
         'selected_player_card': selected_player_card,
         'selected_target_card': selected_target_card,
