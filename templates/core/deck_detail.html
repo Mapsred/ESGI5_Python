@@ -15,7 +15,9 @@
                     <a href="{% url "deck_edit" deck.id %}" class="btn btn-flat btn-warning margin-bottom10">
                         Éditer le deck
                     </a>
-                    <a href="#" class="btn btn-flat btn-danger margin-bottom10">Supprimer le deck</a>
+                    <a href="{% url 'deck_delete' deck.id %}" class="btn btn-flat btn-danger margin-bottom10">
+                        Supprimer le deck
+                    </a>
                 {% endif %}
             </div>
 
