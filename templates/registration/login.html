@@ -28,6 +28,10 @@
             {{ form.errors.password }}
         </div>
 
+        <div class="error-feedback">
+             {{ form.non_field_errors }}
+        </div>
+
         <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
 
     </form>
