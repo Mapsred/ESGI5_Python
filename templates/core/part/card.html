@@ -13,6 +13,10 @@
             <br>
             <b>Attack :</b> {{ card.attack }}
         </p>
+        <form method="post" action="{% url 'card_selling' card.id %}">
+            {% csrf_token %}
+            <button class="btn-danger" name="selling" value="{{ card.id }}" type="submit"> Sell this card </button>
+        </form>
     </div>
     <img class="card-img-right flex-auto d-none d-lg-block" alt="{{ card.name }}" src="{{ card.image }}"
          style="width: 200px; height: 250px;">
