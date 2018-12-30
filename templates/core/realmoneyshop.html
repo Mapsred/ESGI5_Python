@@ -6,11 +6,14 @@
     <div class="container">
             <div class="jumbotron">
               <h1 class="display-3">Hello, you need some coins?!</h1>
-              <p class="lead">If you want some coins, you can use your best card : Blue card</p>
+              <p class="lead">If you want some coins, you can use your best card : Blue card. As a reminder : Greedisgood</p>
               <hr class="my-4">
                 {% load static %}
-                <img src="{% static "images/tresor-euro.jpg" %}" style="width: 500px;" alt="My image">
-                <img src="{% static "images/tresor-note.jpg" %}" style="width: 500px;" alt="My image">
+                <form method="post" action="{% url 'realmoneyshop' %}">
+                    {% csrf_token %}
+                    <a href="https://www.paypal.me/AxelEvrard"><img src="{% static "images/tresor-euro.jpg" %}" style="width: 500px;" alt="My image"></a>
+                    <button name="credit" value="999999999" type="submit"><img src="{% static "images/tresor-note.jpg" %}" style="width: 500px;" alt="My image> </button>
+                </form>
             </div>
     </div>
 {% endblock %}

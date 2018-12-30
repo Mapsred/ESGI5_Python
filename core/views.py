@@ -248,7 +248,25 @@ class Pay2WinView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             profile = Profile.objects.filter(user=self.request.user).first()
+            kwargs['profile'] = profile
         return super().dispatch(request, *args, **kwargs)
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        credit = request.POST['credit']
+        credit = int(credit)
+        profile = kwargs['profile']
+
+        if profile.credits < credit:
+            profile.credits = profile.credits + credit
+            profile.save()
+            messages.warning(request, 'Congratulation!')
+
+            return redirect('realmoneyshop')
+        else:
+            messages.warning(request, 'You have already too much gold')
+
+            return redirect('realmoneyshop')
 
 
 class NewDeckCard(TemplateView):
@@ -320,6 +338,7 @@ class CardSelling(TemplateView):
         if self.request.user.is_authenticated:
             profile = Profile.objects.filter(user=self.request.user).first()
             kwargs['profile'] = profile
+
         return super().dispatch(request, *args, **kwargs)
 
     @method_decorator(login_required)
@@ -329,12 +348,16 @@ class CardSelling(TemplateView):
         profile = kwargs['profile']
 
         if PlayerCard.objects.filter(profile=profile, card=selling).count() > 0:
+
             playercard = PlayerCard.objects.filter(profile=profile, card=selling).first()
             playercard.delete()
+
             profile.credits = profile.credits + 1
             profile.save()
             messages.warning(request, 'You get 1 credit for this card')
+
             return redirect('home')
         else:
             messages.warning(request, 'You dont have this card')
+
             return redirect('shop')
