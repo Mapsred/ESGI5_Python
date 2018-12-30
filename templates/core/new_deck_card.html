@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Shop{% endblock %}
+
+{% block content %}
+    <div class="container">
+            {% for playercard in playercards %}
+                {% include "core/part/card.html" with card=playercard.card %}
+            {% endfor %}
+    </div>
+{% endblock %}

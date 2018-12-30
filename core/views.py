@@ -1,6 +1,9 @@
+from urllib.parse import urlencode
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect, resolve_url
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
@@ -224,8 +227,6 @@ class ShopView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             profile = Profile.objects.filter(user=self.request.user).first()
-            # TODO fix the following line
-            # kwargs['number_cards'] = PlayerCard.objects.filter(profile=profile).aggregate(Sum("numbercards"))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -235,6 +236,59 @@ class Pay2WinView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             profile = Profile.objects.filter(user=self.request.user).first()
-            # TODO fix the following line
-            # kwargs['number_cards'] = PlayerCard.objects.filter(profile=profile).aggregate(Sum("numbercards"))
         return super().dispatch(request, *args, **kwargs)
+
+
+class NewDeckCard(TemplateView):
+    template_name = 'core/new_deck_card.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.filter(user=self.request.user).first()
+            kwargs['profile'] = profile
+
+            if "cards" in request.GET:
+                cards = request.GET['cards'].split(",")
+                playercards = []
+
+                for card in cards:
+                    card = PlayerCard.objects.filter(id=card).first()
+                    playercards.append(card)
+
+                kwargs['playercards'] = playercards
+
+        return super().dispatch(request, *args, **kwargs)
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        price = request.POST['price']
+        price = int(price)
+        profile = kwargs['profile']
+
+        if profile.credits >= price:
+            profile.credits = profile.credits - price
+            profile.save()
+
+            if price == 100:
+                cards = Card.objects.all().order_by('?')[:6]
+            else:
+                cards = Card.objects.all().order_by('?')[:30]
+
+            url_parameter = []
+            for card in cards:
+                player_cards = PlayerCard(profile=profile, card=card)
+                player_cards.save()
+                url_parameter.append(player_cards.id)
+
+            messages.success(request, 'You get new cards')
+
+            url = resolve_url('new_deck_card')
+            full_url = "%s?%s" % (url, urlencode({
+                "cards": ','.join(map(str, url_parameter))
+            }))
+
+            return HttpResponseRedirect(full_url)
+        else:
+            messages.warning(request, 'Not enought credit, you have %s and you need %s' % (profile.credits, price))
+
+            return redirect('shop')

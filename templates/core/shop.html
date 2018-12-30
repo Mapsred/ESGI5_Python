@@ -10,8 +10,11 @@
               <hr class="my-4">
               <p>You will need some money. If you don't have money try to won a game on pvp or by buying extra coin from the  <a class="btn btn-primary" href="{% url "realmoneyshop" %}">P2winshop</a></p>
                 {% load static %}
-                <img src="{% static "images/tresor-piecedor100.jpg" %}" style="width: 500px;" alt="My image">
-                <img src="{% static "images/tresor-piecedor500.jpg" %}" style="width: 500px;" alt="My image">
+                <form method="post" action="{% url 'new_deck_card' %}">
+                    {% csrf_token %}
+                    <button name="price" value="100" type="submit"> <img src="{% static "images/tresor-piecedor100.jpg" %}" style="width: 500px;" alt="My image"> </button>
+                    <button name="price" value="500" type="submit"> <img src="{% static "images/tresor-piecedor500.jpg" %}" style="width: 500px;" alt="My image"> </button>
+                </form>
             </div>
     </div>
 {% endblock %}
