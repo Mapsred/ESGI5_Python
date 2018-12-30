@@ -57,6 +57,20 @@ class CardDetailView(DetailView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        selling = request.POST['price']
+        selling = int(selling)
+        if selling == 1:
+            profile = kwargs['profile']
+            profile.credits = profile.credits + selling
+            profile.save()
+            messages.warning(request, 'You get 1 credit for this card')
+            return redirect('home')
+        else:
+            messages.warning(request, 'You doesnt have this card')
+            return redirect('shop')
+
 
 class DeckListView(ListView):
     model = Deck
@@ -289,4 +303,38 @@ class NewDeckCard(TemplateView):
         else:
             messages.warning(request, 'Not enought credit, you have %s and you need %s' % (profile.credits, price))
 
+            return redirect('shop')
+
+
+class CardSelling(TemplateView):
+    model = Card
+
+    @staticmethod
+    def card_detail_view(request, primary_key):
+        card = get_object_or_404(Card, pk=primary_key)
+
+        return render(request, 'core/card_detail.html', context={'card': card})
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.filter(user=self.request.user).first()
+            kwargs['profile'] = profile
+        return super().dispatch(request, *args, **kwargs)
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        selling = request.POST['selling']
+        selling = int(selling)
+        profile = kwargs['profile']
+
+        if PlayerCard.objects.filter(profile=profile, card=selling).count() > 0:
+            playercard = PlayerCard.objects.filter(profile=profile, card=selling).first()
+            playercard.delete()
+            profile.credits = profile.credits + 1
+            profile.save()
+            messages.warning(request, 'You get 1 credit for this card')
+            return redirect('home')
+        else:
+            messages.warning(request, 'You dont have this card')
             return redirect('shop')
