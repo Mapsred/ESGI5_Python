@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Combat against {{ target }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Combat Zone</h1>
+        {% if not profile_decks %}
+            <div class="alert alert-warning">
+                You do not have any deck yet. You can create one
+                <a href="{% url 'deck_add' %}" class="alert-link">here</a>.
+            </div>
+        {% endif %}
+
+        {% if not target_decks %}
+            <div class="alert alert-warning">
+                Your opponent do not have any deck yet.
+            </div>
+        {% endif %}
+
+
+        {% if profile_decks and target_decks %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    {% include "combat/_deck_choice.html" with decks=profile_decks header="Your" auto_id="profile_auto" input_name="profile_deck" %}
+                    {% include "combat/_deck_choice.html" with decks=target_decks header=target auto_id="target_auto" input_name="target_deck" %}
+                </div>
+                <div class="card margin-top25">
+                    <div class="card-body text-center">
+                        <button type="submit" class="btn btn-primary" name="auto" value="false">
+                            Launch the manual fight
+                        </button>
+                        <button type="submit" class="btn btn-primary" name="auto" value="true">
+                            Launch the automatic fight
+                        </button>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}
+

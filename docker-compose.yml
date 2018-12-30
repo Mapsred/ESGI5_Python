@@ -5,6 +5,8 @@ services:
       image: postgres
       container_name: esgi-pystone-postgres
       restart: always
+      volumes:
+        - ./engine/db/data:/var/lib/postgresql/data:rw
       ports:
         - "8158:5432"
 

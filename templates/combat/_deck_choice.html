@@ -1,0 +1,19 @@
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-header">{{ header }} Deck</div>
+        <div class="card-body">
+            <div>
+                <input type="radio" id="{{ auto_id }}" name="{{ input_name }}" value="_auto" checked>
+                <label for="{{ auto_id }}">Automatic choice</label>
+            </div>
+            {% for deck in decks %}
+                <div>
+                    <input type="radio" id="{{ deck.id }}" name="{{ input_name }}" value="{{ deck.id }}">
+                    <label for="{{ deck.id }}">{{ deck }}</label>
+                    <a target="_blank" href="{% url 'deck_detail' deck.id %}" class="btn btn-flat btn-info">Detail</a>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>

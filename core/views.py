@@ -78,17 +78,15 @@ class DeckDetailView(DetailView):
     model = Deck
     template_name = "core/deck_detail.html"
 
-    def get_queryset(self):
-        profile = Profile.objects.filter(user=self.request.user).first()
-
-        return Deck.objects.filter(profile=profile)
-
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['deck_cards'] = DeckCard.objects.filter(deck=kwargs['object'])
+        profile = Profile.objects.filter(user=self.request.user).first()
+        kwargs['is_current_user'] = profile == kwargs['object'].profile
+        kwargs['profile'] = profile
 
         return super().get_context_data(**kwargs)
 
